@@ -21,21 +21,6 @@ world:setPactorSpawn("FRIENEMY2", 13, 14)
 world:setPactorSpeed("FRIENEMY2", 0.3)
 world:respawnPactor("FRIENEMY2")
 
---local pickup = PointsPickup:new()
---world:addPactor("PICKUP1", pickup)
---world:setPactorSpawn("PICKUP1", 3, 12)
---world:respawnPactor("PICKUP1")
---
---local pickup2 = PointsPickup:new()
---world:addPactor("PICKUP2", pickup2)
---world:setPactorSpawn("PICKUP2", 4, 12)
---world:respawnPactor("PICKUP2")
---
---local pickup3 = PointsPickup:new()
---world:addPactor("PICKUP3", pickup3)
---world:setPactorSpawn("PICKUP3", 5, 12)
---world:respawnPactor("PICKUP3")
-
 local tilenames = GAME:getTileNames()
 local board = GAME:getTiledBoard()
 local Pickup = require("PacDaddyGameWrapper/PointsPickup")

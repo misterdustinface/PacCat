@@ -1,20 +1,11 @@
 require("luasrc/tif")
 local Color = luajava.bindClass("java.awt.Color")
 
+local TILEWIDTH
+local TILEHEIGHT
+
 local borderHeight = 40
 local borderWidth  = 40
-
-local previousTileWidth  = 0
-local previousTileHeight = 0
-
-local previousBoard = {}
-local function getPreviousTileEnum(row, col)
-    if previousBoard[row] == nil then
-        return nil
-    else 
-        return previousBoard[row][col]
-    end
-end
 
 local colormap = {
     ["PLAYER"] = Color.YELLOW,
@@ -32,64 +23,96 @@ local function getTileColor(tilename)
     return color
 end
 
+local drawermap = {
+    ["FLOOR"]   = function(g, row, col) g:fillRect((col-1) * TILEWIDTH + borderWidth, (row-1) * TILEHEIGHT + borderHeight, TILEWIDTH, TILEHEIGHT) end,
+    ["WALL"]    = function(g, row, col) g:fillRect((col-1) * TILEWIDTH + borderWidth, (row-1) * TILEHEIGHT + borderHeight, TILEWIDTH, TILEHEIGHT) end,
+    ["PLAYER"]  = function(g, row, col) 
+        local ok, tileAttributes = pcall(GAME.getAttributeReaderAtTile, GAME, row-1, col-1)
+        local direction
+        local speed__pct
+        if ok then 
+            direction  = tileAttributes:getValueOf("DIRECTION") 
+            speed__pct = tileAttributes:getValueOf("SPEED__PCT")    
+        end
+    
+        g:fillOval((col-1) * TILEWIDTH + borderWidth, (row-1) * TILEHEIGHT + borderHeight, TILEWIDTH, TILEHEIGHT)
+        if direction == "UP" then
+            g:setColor(Color.ORANGE)
+            g:drawRect((col-1) * TILEWIDTH + borderWidth + TILEWIDTH/2, (row-1) * TILEHEIGHT + borderHeight, 1, TILEHEIGHT/2)
+        elseif direction == "DOWN" then
+            g:setColor(Color.ORANGE)
+            g:drawRect((col-1) * TILEWIDTH + borderWidth + TILEWIDTH/2, (row-1) * TILEHEIGHT + borderHeight + TILEHEIGHT/2, 1, TILEHEIGHT/2)
+        elseif direction == "RIGHT" then
+            g:setColor(Color.ORANGE)
+            g:drawRect((col-1) * TILEWIDTH + borderWidth + TILEWIDTH/2, (row-1) * TILEHEIGHT + borderHeight + TILEHEIGHT/2, TILEWIDTH/2, 1)
+        elseif direction == "LEFT" then
+            g:setColor(Color.ORANGE)
+            g:drawRect((col-1) * TILEWIDTH + borderWidth, (row-1) * TILEHEIGHT + borderHeight + TILEHEIGHT/2, TILEWIDTH/2, 1)
+        end
+        
+    end,
+    ["ENEMY"]   = function(g, row, col) 
+        g:fillOval((col-1) * TILEWIDTH + borderWidth, (row-1) * TILEHEIGHT + borderHeight, TILEWIDTH, TILEHEIGHT) 
+    end,
+    ["PICKUP"]  = function(g, row, col) 
+        local pickupWidth, pickupHeight = TILEWIDTH/4, TILEHEIGHT/4
+        g:fillOval((col-1) * TILEWIDTH + borderWidth + TILEWIDTH/2 - pickupWidth/2, (row-1) * TILEHEIGHT + borderHeight + TILEHEIGHT/2 - pickupHeight/2, pickupWidth, pickupHeight)
+    end,
+}
+
+local function getShapeDrawer(tilename)
+    local drawer = drawermap[tilename]
+    if drawer == nil then
+        drawer = drawermap["FLOOR"]
+    end
+    return drawer
+end
+
+local function drawTile(row, col, tilename)
+    local g = DISPLAY:getGraphics()
+    local tileColor = getTileColor(tilename)
+    local tileDrawer = getShapeDrawer(tilename)    
+    g:setColor(tileColor)
+    tileDrawer(g, row, col)
+end
+
 local function drawBoard(board)
     local tilenames = GAME:getTileNames()
-    local TILEWIDTH = (DISPLAY:getWidth() - 2*borderWidth)/ board[1].length
-    local TILEHEIGHT = (DISPLAY:getHeight() - 2*borderHeight) / board.length
-    local g = DISPLAY:getGraphics()
+    local boardWidth = DISPLAY:getWidth() - 2*borderWidth
+    local boardHeight = DISPLAY:getHeight() - 2*borderHeight
+    TILEWIDTH  = boardWidth / board[1].length
+    TILEHEIGHT = boardHeight / board.length
     
     for row = 1, board.length do
         for col = 1, board[1].length do
-            local previousTileEnum = getPreviousTileEnum(row, col)
             local tileEnum = board[row][col]
-            if tileEnum ~= previousTileEnum or TILEWIDTH ~= previousTileWidth or TILEHEIGHT ~= previousTileHeight then
-                local tileName = tilenames[tileEnum+1]
-                local tileColor = getTileColor(tileName)
-            
-                g:setColor(getTileColor("FLOOR"))
-                g:fillRect((col-1) * TILEWIDTH + borderWidth, (row-1) * TILEHEIGHT + borderHeight, TILEWIDTH, TILEHEIGHT)
-                g:setColor(tileColor)
-            
-                if tileName == "PICKUP" then
-                    local pickupWidth, pickupHeight = TILEWIDTH/4, TILEHEIGHT/4
-                    g:fillOval((col-1) * TILEWIDTH + borderWidth + TILEWIDTH/2 - pickupWidth/2, (row-1) * TILEHEIGHT + borderHeight + TILEHEIGHT/2 - pickupHeight/2, pickupWidth, pickupHeight)
-                elseif tileName == "PLAYER" then
-                    g:fillOval((col-1) * TILEWIDTH + borderWidth, (row-1) * TILEHEIGHT + borderHeight, TILEWIDTH, TILEHEIGHT)
-                else
-                    g:fillRect((col-1) * TILEWIDTH + borderWidth, (row-1) * TILEHEIGHT + borderHeight, TILEWIDTH, TILEHEIGHT)
-                end
-                
-            end
+            local tileName = tilenames[tileEnum+1]
+            drawTile(row, col, tileName)
         end
     end
-    
-    previousBoard = board
-    previousTileWidth = TILEWIDTH
-    previousTileHeight = TILEHEIGHT
 end
 
 local function drawInfo()
     local g = DISPLAY:getGraphics()
-
-    g:setColor(Color.BLACK)
-    g:fillRect(0, 0, DISPLAY:getWidth(), borderHeight)
-    g:fillRect(0, 0, borderWidth, DISPLAY:getHeight())
-    g:fillRect(DISPLAY:getWidth() - borderWidth, borderHeight, borderWidth, DISPLAY:getHeight() - borderHeight)
-    g:fillRect(borderWidth, DISPLAY:getHeight() - borderHeight, DISPLAY:getWidth() - borderWidth, borderHeight)
     
     local upsStr = tif(GAME:getValueOf("IS_PAUSED"), "PAUSED", "UPS: " .. GAME:getValueOf("GAMESPEED__UPS"))
+    local fpsStr = "FPS: " .. DISPLAY:getFPS()
     
     g:setColor(Color.WHITE)
     g:drawString(upsStr, 20, 20)
-    
-    g:setColor(Color.WHITE)
-    g:drawString("LIVES " .. GAME:getValueOf("LIVES"), 80, 20)
-    
-    g:setColor(Color.WHITE)
-    g:drawString("SCORE " .. GAME:getValueOf("SCORE"), 140, 20)
+    g:drawString(fpsStr, 80, 20)
+    g:drawString("LIVES " .. GAME:getValueOf("LIVES"), 140, 20)
+    g:drawString("SCORE " .. GAME:getValueOf("SCORE"), 200, 20)
+end
+
+local function clearScreen()
+    local g = DISPLAY:getGraphics()
+    g:setColor(Color.BLACK)
+    g:fillRect(0, 0, DISPLAY:getWidth(), DISPLAY:getHeight())
 end
 
 local function drawGame()
+    clearScreen()
     local okAccess, board = pcall(GAME.getTiledBoard, GAME)
     if okAccess then drawBoard(board) end
     drawInfo()
