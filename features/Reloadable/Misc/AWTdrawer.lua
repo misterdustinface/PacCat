@@ -1,5 +1,10 @@
 require("luasrc/tif")
 local Color = luajava.bindClass("java.awt.Color")
+local Image = luajava.bindClass("java.awt.image.BufferedImage")
+local RenderingHints = luajava.bindClass("java.awt.RenderingHints")
+
+local ImageA = luajava.newInstance("java.awt.image.BufferedImage", 1, 1, Image.TYPE_INT_RGB)
+local ImageB = luajava.newInstance("java.awt.image.BufferedImage", 1, 1, Image.TYPE_INT_RGB)
 
 local TILEWIDTH
 local TILEHEIGHT
@@ -30,30 +35,30 @@ local drawermap = {
         local direction = info:getValueOf("DIRECTION")
         local speed__pct = info:getValueOf("SPEED__PCT")
     
-        g:fillOval((col) * TILEWIDTH + borderWidth, (row) * TILEHEIGHT + borderHeight, TILEWIDTH, TILEHEIGHT)
+        g:fillOval((col) * TILEWIDTH, (row) * TILEHEIGHT, TILEWIDTH, TILEHEIGHT)
         if direction == "UP" then
             g:setColor(Color.ORANGE)
-            g:drawRect((col) * TILEWIDTH + borderWidth + TILEWIDTH/2, (row) * TILEHEIGHT + borderHeight, 1, TILEHEIGHT/2)
+            g:drawRect((col) * TILEWIDTH + TILEWIDTH/2, (row) * TILEHEIGHT, 1, TILEHEIGHT/2)
         elseif direction == "DOWN" then
             g:setColor(Color.ORANGE)
-            g:drawRect((col) * TILEWIDTH + borderWidth + TILEWIDTH/2, (row) * TILEHEIGHT + borderHeight + TILEHEIGHT/2, 1, TILEHEIGHT/2)
+            g:drawRect((col) * TILEWIDTH + TILEWIDTH/2, (row) * TILEHEIGHT + TILEHEIGHT/2, 1, TILEHEIGHT/2)
         elseif direction == "RIGHT" then
             g:setColor(Color.ORANGE)
-            g:drawRect((col) * TILEWIDTH + borderWidth + TILEWIDTH/2, (row) * TILEHEIGHT + borderHeight + TILEHEIGHT/2, TILEWIDTH/2, 1)
+            g:drawRect((col) * TILEWIDTH + TILEWIDTH/2, (row) * TILEHEIGHT + TILEHEIGHT/2, TILEWIDTH/2, 1)
         elseif direction == "LEFT" then
             g:setColor(Color.ORANGE)
-            g:drawRect((col) * TILEWIDTH + borderWidth, (row) * TILEHEIGHT + borderHeight + TILEHEIGHT/2, TILEWIDTH/2, 1)
+            g:drawRect((col) * TILEWIDTH, (row) * TILEHEIGHT + TILEHEIGHT/2, TILEWIDTH/2, 1)
         end
         
     end,
     ["ENEMY"]   = function(g, info)
         local row, col = info:getValueOf("ROW"), info:getValueOf("COL")
-        g:fillOval((col) * TILEWIDTH + borderWidth, (row) * TILEHEIGHT + borderHeight, TILEWIDTH, TILEHEIGHT) 
+        g:fillOval((col) * TILEWIDTH, (row) * TILEHEIGHT, TILEWIDTH, TILEHEIGHT) 
     end,
     ["PICKUP"]  = function(g, info) 
         local row, col = info:getValueOf("ROW"), info:getValueOf("COL")
         local pickupWidth, pickupHeight = TILEWIDTH/4, TILEHEIGHT/4
-        g:fillOval((col) * TILEWIDTH + borderWidth + TILEWIDTH/2 - pickupWidth/2, (row) * TILEHEIGHT + borderHeight + TILEHEIGHT/2 - pickupHeight/2, pickupWidth, pickupHeight)
+        g:fillOval((col) * TILEWIDTH + TILEWIDTH/2 - pickupWidth/2, (row) * TILEHEIGHT + TILEHEIGHT/2 - pickupHeight/2, pickupWidth, pickupHeight)
     end,
 }
 
@@ -62,22 +67,20 @@ local function getPactorDrawer(type)
     return drawer
 end
 
-local function drawTile(row, col, tilename)
-    local g = DISPLAY:getGraphics()
+local function drawTile(g, row, col, tilename)
     local tileColor = getColor(tilename)   
     g:setColor(tileColor)
-    g:fillRect((col-1) * TILEWIDTH + borderWidth, (row-1) * TILEHEIGHT + borderHeight, TILEWIDTH, TILEHEIGHT)
+    g:fillRect((col-1) * TILEWIDTH, (row-1) * TILEHEIGHT, TILEWIDTH, TILEHEIGHT)
 end
 
-local function drawPactor(type, info)
-    local g = DISPLAY:getGraphics()
+local function drawPactor(g, type, info)
     local pactorColor = getColor(type)
     local pactorDrawer = getPactorDrawer(type)    
     g:setColor(pactorColor)
     pactorDrawer(g, info)
 end
 
-local function drawBoard(board)
+local function drawBoard(g, board)
     local tilenames = GAME:getTileNames()
     local boardWidth = DISPLAY:getWidth() - 2*borderWidth
     local boardHeight = DISPLAY:getHeight() - 2*borderHeight
@@ -88,7 +91,7 @@ local function drawBoard(board)
         for col = 1, board[1].length do
             local tileEnum = board[row][col]
             local tileName = tilenames[tileEnum+1]
-            drawTile(row, col, tileName)
+            drawTile(g, row, col, tileName)
         end
     end
     
@@ -97,20 +100,18 @@ local function drawBoard(board)
     local players = GAME:getInfoForAllPactorsWithAttribute("IS_PLAYER")
     
     for x = 1, pickups.length do
-        drawPactor("PICKUP", pickups[x])
+        drawPactor(g, "PICKUP", pickups[x])
     end
     for x = 1, enemies.length do
-        drawPactor("ENEMY", enemies[x])
+        drawPactor(g, "ENEMY", enemies[x])
     end
     for x = 1, players.length do
-        drawPactor("PLAYER", players[x])
+        drawPactor(g, "PLAYER", players[x])
     end
     
 end
 
-local function drawInfo()
-    local g = DISPLAY:getGraphics()
-    
+local function drawInfo(g)
     local upsStr = tif(GAME:getValueOf("IS_PAUSED"), "PAUSED", "UPS: " .. GAME:getValueOf("GAMESPEED__UPS"))
     local fpsStr = "FPS: " .. DISPLAY:getFPS()
     
@@ -127,11 +128,24 @@ local function clearScreen()
     g:fillRect(0, 0, DISPLAY:getWidth(), DISPLAY:getHeight())
 end
 
+local function swapImageBuffers()
+    ImageA, ImageB = ImageB, ImageA
+    ImageA = luajava.newInstance("java.awt.image.BufferedImage", DISPLAY:getWidth(), DISPLAY:getHeight(), Image.TYPE_INT_RGB)
+end
+
 local function drawGame()
     clearScreen()
+    local g = ImageA:getGraphics()
+    g:setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
     local okAccess, board = pcall(GAME.getTiledBoard, GAME)
-    if okAccess then drawBoard(board) end
-    drawInfo()
+    if okAccess then drawBoard(g, board) end
+        
+    g = DISPLAY:getGraphics()
+    g:setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
+    g:drawImage(ImageB, borderWidth, borderHeight, nil)
+    drawInfo(g)
+    
+    swapImageBuffers()
 end
 
 DRAWGAME = drawGame
