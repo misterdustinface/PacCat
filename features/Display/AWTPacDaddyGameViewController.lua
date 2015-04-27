@@ -43,7 +43,7 @@ end
 local function create()
     local SCREEN_WIDTH  = 400
     local SCREEN_HEIGHT = 400
-    local TITLE = "Pac Daddy"
+    local TITLE = "PacCat"
     
     local inputFactory = require("AWTLib/AWTInputFactory")
     local keylistener = inputFactory.createKeyListener(keypressDispatch)
