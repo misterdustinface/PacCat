@@ -1,5 +1,5 @@
 return {
-  "setupWorldTiles.lua",
+  "setupAdditionalWorldTiles.lua",
   "loadLevel.lua",
   "populateLevel.lua",
 }

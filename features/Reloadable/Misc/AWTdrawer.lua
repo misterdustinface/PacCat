@@ -8,14 +8,15 @@ local borderHeight = 40
 local borderWidth  = 40
 
 local colormap = {
-    ["PLAYER"] = Color.YELLOW,
-    ["WALL"]   = Color.BLUE,
-    ["FLOOR"]  = Color.BLACK,
-    ["ENEMY"]  = Color.RED,
-    ["PICKUP"] = Color.WHITE,
+    ["PLAYER"]        = Color.YELLOW,
+    ["ENEMY"]         = Color.RED,
+    ["WALL"]          = Color.BLUE,
+    ["FLOOR"]         = Color.BLACK,
+    ["ENEMY_SPAWN"]   = Color.GRAY,
+    ["PICKUP"]        = Color.WHITE,
 }
 
-local function getTileColor(tilename)
+local function getColor(tilename)
     local color = colormap[tilename]
     if color == nil then
         color = Color.GRAY
@@ -24,56 +25,56 @@ local function getTileColor(tilename)
 end
 
 local drawermap = {
-    ["FLOOR"]   = function(g, row, col) g:fillRect((col-1) * TILEWIDTH + borderWidth, (row-1) * TILEHEIGHT + borderHeight, TILEWIDTH, TILEHEIGHT) end,
-    ["WALL"]    = function(g, row, col) g:fillRect((col-1) * TILEWIDTH + borderWidth, (row-1) * TILEHEIGHT + borderHeight, TILEWIDTH, TILEHEIGHT) end,
-    ["PLAYER"]  = function(g, row, col) 
-        local ok, tileAttributes = pcall(GAME.getAttributeReaderAtTile, GAME, row-1, col-1)
-        local direction
-        local speed__pct
-        if ok then 
-            direction  = tileAttributes:getValueOf("DIRECTION") 
-            speed__pct = tileAttributes:getValueOf("SPEED__PCT")    
-        end
+    ["PLAYER"]  = function(g, info) 
+        local row, col = info:getValueOf("ROW"), info:getValueOf("COL")
+        local direction = info:getValueOf("DIRECTION")
+        local speed__pct = info:getValueOf("SPEED__PCT")
     
-        g:fillOval((col-1) * TILEWIDTH + borderWidth, (row-1) * TILEHEIGHT + borderHeight, TILEWIDTH, TILEHEIGHT)
+        g:fillOval((col) * TILEWIDTH + borderWidth, (row) * TILEHEIGHT + borderHeight, TILEWIDTH, TILEHEIGHT)
         if direction == "UP" then
             g:setColor(Color.ORANGE)
-            g:drawRect((col-1) * TILEWIDTH + borderWidth + TILEWIDTH/2, (row-1) * TILEHEIGHT + borderHeight, 1, TILEHEIGHT/2)
+            g:drawRect((col) * TILEWIDTH + borderWidth + TILEWIDTH/2, (row) * TILEHEIGHT + borderHeight, 1, TILEHEIGHT/2)
         elseif direction == "DOWN" then
             g:setColor(Color.ORANGE)
-            g:drawRect((col-1) * TILEWIDTH + borderWidth + TILEWIDTH/2, (row-1) * TILEHEIGHT + borderHeight + TILEHEIGHT/2, 1, TILEHEIGHT/2)
+            g:drawRect((col) * TILEWIDTH + borderWidth + TILEWIDTH/2, (row) * TILEHEIGHT + borderHeight + TILEHEIGHT/2, 1, TILEHEIGHT/2)
         elseif direction == "RIGHT" then
             g:setColor(Color.ORANGE)
-            g:drawRect((col-1) * TILEWIDTH + borderWidth + TILEWIDTH/2, (row-1) * TILEHEIGHT + borderHeight + TILEHEIGHT/2, TILEWIDTH/2, 1)
+            g:drawRect((col) * TILEWIDTH + borderWidth + TILEWIDTH/2, (row) * TILEHEIGHT + borderHeight + TILEHEIGHT/2, TILEWIDTH/2, 1)
         elseif direction == "LEFT" then
             g:setColor(Color.ORANGE)
-            g:drawRect((col-1) * TILEWIDTH + borderWidth, (row-1) * TILEHEIGHT + borderHeight + TILEHEIGHT/2, TILEWIDTH/2, 1)
+            g:drawRect((col) * TILEWIDTH + borderWidth, (row) * TILEHEIGHT + borderHeight + TILEHEIGHT/2, TILEWIDTH/2, 1)
         end
         
     end,
-    ["ENEMY"]   = function(g, row, col) 
-        g:fillOval((col-1) * TILEWIDTH + borderWidth, (row-1) * TILEHEIGHT + borderHeight, TILEWIDTH, TILEHEIGHT) 
+    ["ENEMY"]   = function(g, info)
+        local row, col = info:getValueOf("ROW"), info:getValueOf("COL")
+        g:fillOval((col) * TILEWIDTH + borderWidth, (row) * TILEHEIGHT + borderHeight, TILEWIDTH, TILEHEIGHT) 
     end,
-    ["PICKUP"]  = function(g, row, col) 
+    ["PICKUP"]  = function(g, info) 
+        local row, col = info:getValueOf("ROW"), info:getValueOf("COL")
         local pickupWidth, pickupHeight = TILEWIDTH/4, TILEHEIGHT/4
-        g:fillOval((col-1) * TILEWIDTH + borderWidth + TILEWIDTH/2 - pickupWidth/2, (row-1) * TILEHEIGHT + borderHeight + TILEHEIGHT/2 - pickupHeight/2, pickupWidth, pickupHeight)
+        g:fillOval((col) * TILEWIDTH + borderWidth + TILEWIDTH/2 - pickupWidth/2, (row) * TILEHEIGHT + borderHeight + TILEHEIGHT/2 - pickupHeight/2, pickupWidth, pickupHeight)
     end,
 }
 
-local function getShapeDrawer(tilename)
-    local drawer = drawermap[tilename]
-    if drawer == nil then
-        drawer = drawermap["FLOOR"]
-    end
+local function getPactorDrawer(type)
+    local drawer = drawermap[type]
     return drawer
 end
 
 local function drawTile(row, col, tilename)
     local g = DISPLAY:getGraphics()
-    local tileColor = getTileColor(tilename)
-    local tileDrawer = getShapeDrawer(tilename)    
+    local tileColor = getColor(tilename)   
     g:setColor(tileColor)
-    tileDrawer(g, row, col)
+    g:fillRect((col-1) * TILEWIDTH + borderWidth, (row-1) * TILEHEIGHT + borderHeight, TILEWIDTH, TILEHEIGHT)
+end
+
+local function drawPactor(type, info)
+    local g = DISPLAY:getGraphics()
+    local pactorColor = getColor(type)
+    local pactorDrawer = getPactorDrawer(type)    
+    g:setColor(pactorColor)
+    pactorDrawer(g, info)
 end
 
 local function drawBoard(board)
@@ -90,6 +91,21 @@ local function drawBoard(board)
             drawTile(row, col, tileName)
         end
     end
+    
+    local pickups = GAME:getInfoForAllPactorsWithAttribute("IS_PICKUP")
+    local enemies = GAME:getInfoForAllPactorsWithAttribute("IS_ENEMY")
+    local players = GAME:getInfoForAllPactorsWithAttribute("IS_PLAYER")
+    
+    for x = 1, pickups.length do
+        drawPactor("PICKUP", pickups[x])
+    end
+    for x = 1, enemies.length do
+        drawPactor("ENEMY", enemies[x])
+    end
+    for x = 1, players.length do
+        drawPactor("PLAYER", players[x])
+    end
+    
 end
 
 local function drawInfo()

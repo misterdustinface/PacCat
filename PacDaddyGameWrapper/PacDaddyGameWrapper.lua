@@ -38,8 +38,8 @@ local function getTileNames(this)
     return this.boardReader:getTileNames()
 end
 
-local function getAttributeReaderAtTile(this, row, col)
-    return this.boardReader:getAttributeReaderAtTile(row, col)
+local function getInfoForAllPactorsWithAttribute(this, attribute)
+    return this.boardReader:getInfoForAllPactorsWithAttribute(attribute)
 end
 
 local function getModifiableWorld(this)
@@ -66,19 +66,19 @@ local function getModifiablePactor(this, name)
     return this:getModifiableWorld():getPactor(name)
 end
 
-public.boardReader                   = game:getBoardReader()
-public.inputProcessor                = game:getInputProcessor()
-public.attributeReader               = game:getGameAttributeReader()
-public.addComponent                  = addComponentToGame
-public.start                         = startGame
-public.quit                          = quitGame
-public.sendCommand                   = sendCommand
-public.getCommands                   = getCommands
-public.getValueOf                    = getValueOf
-public.getAttributes                 = getAttributes
-public.getTiledBoard                 = getTiledBoard
-public.getTileNames                  = getTileNames
-public.getAttributeReaderAtTile      = getAttributeReaderAtTile
+public.boardReader                        = game:getBoardReader()
+public.inputProcessor                     = game:getInputProcessor()
+public.attributeReader                    = game:getGameAttributeReader()
+public.addComponent                       = addComponentToGame
+public.start                              = startGame
+public.quit                               = quitGame
+public.sendCommand                        = sendCommand
+public.getCommands                        = getCommands
+public.getValueOf                         = getValueOf
+public.getAttributes                      = getAttributes
+public.getTiledBoard                      = getTiledBoard
+public.getTileNames                       = getTileNames
+public.getInfoForAllPactorsWithAttribute  = getInfoForAllPactorsWithAttribute
 
 public.getModifiableWorld            = getModifiableWorld
 public.getModifiableAttributes       = getModifiableAttributes

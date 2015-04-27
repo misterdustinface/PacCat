@@ -6,6 +6,7 @@ local public = {}
 local function new()
     local pickup = Pactor:new()
     pickup:setAttribute("IS_PICKUP", true)
+    pickup:setAttribute("TYPE", "PICKUP")
     pickup:setAttribute("VALUE", 1)
     
     --pickup:forgetAction("LEFT")
@@ -14,7 +15,7 @@ local function new()
     --pickup:forgetAction("RIGHT")
     
     local function onPactorCollision(otherPactorAttributes)
-        if otherPactorAttributes:getValueOf("IS_PLAYER") then
+        if otherPactorAttributes:getValueOf("TYPE") == "PLAYER" then
             local gameAttributes = GAME:getModifiableAttributes()
             gameAttributes:setAttribute("SCORE", gameAttributes:getValueOf("SCORE") + pickup:getValueOf("VALUE"))
             local world = GAME:getModifiableWorld()

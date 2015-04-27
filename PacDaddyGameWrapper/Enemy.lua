@@ -6,6 +6,7 @@ local public = {}
 local function new()
     local enemy = Pactor:new()
     enemy:setAttribute("IS_ENEMY", true)
+    enemy:setAttribute("TYPE", "ENEMY")
     enemy:setAttribute("VALUE", 200)
     
     local oppositeDirectionTable = {
@@ -17,7 +18,7 @@ local function new()
     }
     
     local function onPactorCollision(otherPactorAttributes)
-        if otherPactorAttributes:getValueOf("IS_ENEMY") then
+        if otherPactorAttributes:getValueOf("TYPE") == "ENEMY" then
             local myCurrentDirection = enemy:getValueOf("DIRECTION")
             local myOppositeDirection = oppositeDirectionTable[myCurrentDirection]
             enemy:performAction(myOppositeDirection)

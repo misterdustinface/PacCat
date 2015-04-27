@@ -7,10 +7,10 @@ local public = {}
 local function new()
     local player = Pactor:new()
     player:setAttribute("IS_PLAYER", true)
+    player:setAttribute("TYPE", "PLAYER")
     
     local function onPactorCollision(otherPactorAttributes)
-        if otherPactorAttributes:getValueOf("IS_ENEMY") 
-        and not otherPactorAttributes:getValueOf("IS_PICKUP") then
+        if otherPactorAttributes:getValueOf("TYPE") == "ENEMY" then
             world:respawnAllPactors()
             local gameAttributes = GAME:getModifiableAttributes()
             gameAttributes:setAttribute("LIVES", gameAttributes:getValueOf("LIVES") - 1)
