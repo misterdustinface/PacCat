@@ -99,14 +99,20 @@ local function drawBoard(g, board)
     local enemies = GAME:getInfoForAllPactorsWithAttribute("IS_ENEMY")
     local players = GAME:getInfoForAllPactorsWithAttribute("IS_PLAYER")
     
-    for x = 1, pickups.length do
-        drawPactor(g, "PICKUP", pickups[x])
+    if pickups then
+      for x = 1, pickups.length do
+          drawPactor(g, "PICKUP", pickups[x])
+      end
     end
-    for x = 1, enemies.length do
-        drawPactor(g, "ENEMY", enemies[x])
+    if enemies then
+      for x = 1, enemies.length do
+          drawPactor(g, "ENEMY", enemies[x])
+      end
     end
-    for x = 1, players.length do
-        drawPactor(g, "PLAYER", players[x])
+    if players then
+      for x = 1, players.length do
+          drawPactor(g, "PLAYER", players[x])
+      end
     end
     
 end
@@ -137,8 +143,8 @@ local function drawGame()
     clearScreen()
     local g = ImageA:getGraphics()
     g:setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
-    local okAccess, board = pcall(GAME.getTiledBoard, GAME)
-    if okAccess then drawBoard(g, board) end
+    local board = GAME:getTiledBoard()
+    if board then drawBoard(g, board) end
         
     g = DISPLAY:getGraphics()
     g:setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)

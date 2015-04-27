@@ -31,15 +31,18 @@ local function getAttributes(this)
 end
 
 local function getTiledBoard(this)
-    return this.boardReader:getTiledBoard()
+    local ok, board = pcall(this.boardReader.getTiledBoard, this.boardReader)
+    if ok then return board end
 end
 
 local function getTileNames(this)
-    return this.boardReader:getTileNames()
+    local ok, tilenames = pcall(this.boardReader.getTileNames, this.boardReader)
+    if ok then return tilenames end
 end
 
 local function getInfoForAllPactorsWithAttribute(this, attribute)
-    return this.boardReader:getInfoForAllPactorsWithAttribute(attribute)
+    local ok, info = pcall(this.boardReader.getInfoForAllPactorsWithAttribute, this.boardReader, attribute)
+    if ok then return info end
 end
 
 local function getModifiableWorld(this)
@@ -66,19 +69,19 @@ local function getModifiablePactor(this, name)
     return this:getModifiableWorld():getPactor(name)
 end
 
-public.boardReader                        = game:getBoardReader()
-public.inputProcessor                     = game:getInputProcessor()
-public.attributeReader                    = game:getGameAttributeReader()
-public.addComponent                       = addComponentToGame
-public.start                              = startGame
-public.quit                               = quitGame
-public.sendCommand                        = sendCommand
-public.getCommands                        = getCommands
-public.getValueOf                         = getValueOf
-public.getAttributes                      = getAttributes
-public.getTiledBoard                      = getTiledBoard
-public.getTileNames                       = getTileNames
-public.getInfoForAllPactorsWithAttribute  = getInfoForAllPactorsWithAttribute
+public.boardReader                   = game:getBoardReader()
+public.inputProcessor                = game:getInputProcessor()
+public.attributeReader               = game:getGameAttributeReader()
+public.addComponent                  = addComponentToGame
+public.start                         = startGame
+public.quit                          = quitGame
+public.sendCommand                   = sendCommand
+public.getCommands                   = getCommands
+public.getValueOf                    = getValueOf
+public.getAttributes                 = getAttributes
+public.getTiledBoard                 = getTiledBoard
+public.getTileNames                  = getTileNames
+public.getInfoForAllPactorsWithAttribute = getInfoForAllPactorsWithAttribute
 
 public.getModifiableWorld            = getModifiableWorld
 public.getModifiableAttributes       = getModifiableAttributes
