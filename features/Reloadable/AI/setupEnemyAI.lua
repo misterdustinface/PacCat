@@ -6,13 +6,13 @@ local function followPlayer1()
     local player1Pos = { row = world:getRowOf("PLAYER1"),  col = world:getColOf("PLAYER1") }
     local myPos      = { row = world:getRowOf("FRIENEMY"), col = world:getColOf("FRIENEMY") }
     
-    if player1Pos.row < myPos.row and not world:isWall(myPos.row-1, myPos.col) then
+    if player1Pos.row < myPos.row     and world:isTraversableForPactor(myPos.row-1, myPos.col, "FRIENEMY") then
         frienemy:performAction("UP")
-    elseif player1Pos.row > myPos.row and not world:isWall(myPos.row+1, myPos.col) then
+    elseif player1Pos.row > myPos.row and world:isTraversableForPactor(myPos.row+1, myPos.col, "FRIENEMY") then
         frienemy:performAction("DOWN")
-    elseif player1Pos.col < myPos.col and not world:isWall(myPos.row, myPos.col-1) then
+    elseif player1Pos.col < myPos.col and world:isTraversableForPactor(myPos.row, myPos.col-1, "FRIENEMY") then
         frienemy:performAction("LEFT")
-    elseif player1Pos.col > myPos.col and not world:isWall(myPos.row, myPos.col+1) then
+    elseif player1Pos.col > myPos.col and world:isTraversableForPactor(myPos.row, myPos.col+1, "FRIENEMY") then
         frienemy:performAction("RIGHT")
     end
 end
