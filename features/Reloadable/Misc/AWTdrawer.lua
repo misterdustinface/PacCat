@@ -101,6 +101,8 @@ local function drawPactors(g)
     local enemies = GAME:getInfoForAllPactorsWithAttribute("IS_ENEMY")
     local players = GAME:getInfoForAllPactorsWithAttribute("IS_PLAYER")
     
+    g:setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
+    
     if pickups then
       for x = 1, pickups.length do
           drawPactor(g, "PICKUP", pickups[x])
@@ -116,17 +118,21 @@ local function drawPactors(g)
           drawPactor(g, "PLAYER", players[x])
       end
     end
+    
+    g:setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF)
 end
 
 local function drawInfo(g)
     local upsStr = tif(GAME:getValueOf("IS_PAUSED"), "PAUSED", "UPS: " .. GAME:getValueOf("GAMESPEED__UPS"))
     local fpsStr = "FPS: " .. DISPLAY:getFPS()
     
+    g:setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
     g:setColor(Color.WHITE)
     g:drawString(upsStr, 20, 20)
     g:drawString(fpsStr, 80, 20)
     g:drawString("LIVES " .. GAME:getValueOf("LIVES"), 140, 20)
     g:drawString("SCORE " .. GAME:getValueOf("SCORE"), 200, 20)
+    g:setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF)
 end
 
 local function clearScreen()
@@ -151,13 +157,11 @@ end
 local function drawGame()
     clearScreen()
     local g = DISPLAY:getGraphics()
-    g:setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
     g:drawImage(getRenderingImage(), borderWidth, borderHeight, nil)
     drawInfo(g)
     swapImageBuffers()
     
     local g = getDrawingImage():getGraphics()
-    g:setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
     local board = GAME:getTiledBoard()
     if board then drawBoard(g, board) end
     drawPactors(g)
