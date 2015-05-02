@@ -70,7 +70,7 @@ end
 local function drawTile(g, row, col, tilename)
     local tileColor = getColor(tilename)   
     g:setColor(tileColor)
-    g:fillRect((col-1) * TILEWIDTH, (row-1) * TILEHEIGHT, TILEWIDTH, TILEHEIGHT)
+    g:fillRect((col-1) * TILEWIDTH, (row-1) * TILEHEIGHT, TILEWIDTH+1, TILEHEIGHT+1)
 end
 
 local function drawPactor(g, type, info)
