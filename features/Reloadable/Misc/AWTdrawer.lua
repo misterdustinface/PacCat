@@ -139,19 +139,26 @@ local function swapImageBuffers()
     ImageA = luajava.newInstance("java.awt.image.BufferedImage", DISPLAY:getWidth(), DISPLAY:getHeight(), Image.TYPE_INT_RGB)
 end
 
+local function getDrawingImage()
+    return ImageA 
+end
+
+local function getRenderingImage()
+    return ImageB
+end
+
 local function drawGame()
     clearScreen()
-    local g = ImageA:getGraphics()
+    local g = DISPLAY:getGraphics()
+    g:setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
+    g:drawImage(getRenderingImage(), borderWidth, borderHeight, nil)
+    drawInfo(g)
+    swapImageBuffers()
+    
+    local g = getDrawingImage():getGraphics()
     g:setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
     local board = GAME:getTiledBoard()
     if board then drawBoard(g, board) end
-        
-    g = DISPLAY:getGraphics()
-    g:setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
-    g:drawImage(ImageB, borderWidth, borderHeight, nil)
-    drawInfo(g)
-    
-    swapImageBuffers()
 end
 
 DRAWGAME = drawGame

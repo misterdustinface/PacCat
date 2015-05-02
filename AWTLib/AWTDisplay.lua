@@ -6,8 +6,8 @@ local function init(display, SCREEN_WIDTH, SCREEN_HEIGHT, titleString)
     local frame  = luajava.newInstance("javax.swing.JFrame")
     local panel  = luajava.newInstance("javax.swing.JPanel")
     panel:setDoubleBuffered(true)
-    frame:setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame:add(panel);
+    frame:setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
+    frame:add(panel)
     
     display.frame  = frame
     display.panel  = panel
@@ -19,7 +19,7 @@ local function init(display, SCREEN_WIDTH, SCREEN_HEIGHT, titleString)
         display:setTitle(titleString)
     end
     
-    display:show()    
+    display:show()
 end
 
 local function addKeyListener(display, keylistener)
