@@ -94,7 +94,9 @@ local function drawBoard(g, board)
             drawTile(g, row, col, tileName)
         end
     end
-    
+end
+
+local function drawPactors(g)
     local pickups = GAME:getInfoForAllPactorsWithAttribute("IS_PICKUP")
     local enemies = GAME:getInfoForAllPactorsWithAttribute("IS_ENEMY")
     local players = GAME:getInfoForAllPactorsWithAttribute("IS_PLAYER")
@@ -114,7 +116,6 @@ local function drawBoard(g, board)
           drawPactor(g, "PLAYER", players[x])
       end
     end
-    
 end
 
 local function drawInfo(g)
@@ -159,6 +160,7 @@ local function drawGame()
     g:setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
     local board = GAME:getTiledBoard()
     if board then drawBoard(g, board) end
+    drawPactors(g)
 end
 
 DRAWGAME = drawGame
