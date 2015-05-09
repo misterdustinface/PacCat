@@ -1,4 +1,4 @@
-local gameAttributes = GAME:getModifiableAttributes()
+local gameAttributes = GAME:getAttributes()
 
 local function gameRules()
     if GAME:getValueOf("LIVES") == 0 then

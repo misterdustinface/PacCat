@@ -1,4 +1,4 @@
-local gameAttributes = GAME:getModifiableAttributes()
+local gameAttributes = GAME:getAttributes()
 
 gameAttributes:setAttribute("SCORE", 0)
 gameAttributes:setAttribute("LIVES", 3)

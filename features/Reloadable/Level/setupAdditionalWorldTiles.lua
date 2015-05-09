@@ -1,4 +1,4 @@
-local world = GAME:getModifiableWorld()
+local world = GAME:getWorld()
 
 world:addTileType("FLOOR")
 world:addTileType("WALL")

@@ -66,7 +66,8 @@ local function getModifiablePactorController(this)
 end
 
 local function getModifiablePactor(this, name)
-    return this:getModifiableWorld():getPactor(name)
+    local world = this:getWorld()
+    return world:getPactor(name)
 end
 
 public.boardReader                   = game:getBoardReader()
@@ -82,12 +83,11 @@ public.getAttributes                 = getAttributes
 public.getTiledBoard                 = getTiledBoard
 public.getTileNames                  = getTileNames
 public.getInfoForAllPactorsWithAttribute = getInfoForAllPactorsWithAttribute
-
-public.getModifiableWorld            = getModifiableWorld
-public.getModifiableAttributes       = getModifiableAttributes
-public.getModifiableInputProcessor   = getModifiableInputProcessor
-public.getModifiableGameLoop         = getModifiableGameLoop
-public.getModifiablePactorController = getModifiablePactorController
-public.getModifiablePactor           = getModifiablePactor
+public.getWorld            = getModifiableWorld
+public.getAttributes       = getModifiableAttributes
+public.getInputProcessor   = getModifiableInputProcessor
+public.getGameLoop         = getModifiableGameLoop
+public.getPactorController = getModifiablePactorController
+public.getPactor           = getModifiablePactor
 
 return public

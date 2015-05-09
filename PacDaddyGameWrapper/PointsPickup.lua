@@ -16,9 +16,9 @@ local function new()
     
     local function onPactorCollision(otherPactorAttributes)
         if otherPactorAttributes:getValueOf("TYPE") == "PLAYER" then
-            local gameAttributes = GAME:getModifiableAttributes()
+            local gameAttributes = GAME:getAttributes()
             gameAttributes:setAttribute("SCORE", gameAttributes:getValueOf("SCORE") + pickup:getValueOf("VALUE"))
-            local world = GAME:getModifiableWorld()
+            local world = GAME:getWorld()
             local myName = pickup:getValueOf("NAME")
             world:removePactor(myName)
         end

@@ -1,9 +1,9 @@
 require("luasrc/VoidFunctionPointer")
 
-local inputProcessor   = GAME:getModifiableInputProcessor()
-local pactorController = GAME:getModifiablePactorController()
-local gameAttributes   = GAME:getModifiableAttributes()
-local mainLoop         = GAME:getModifiableGameLoop()
+local inputProcessor   = GAME:getInputProcessor()
+local pactorController = GAME:getPactorController()
+local gameAttributes   = GAME:getAttributes()
+local mainLoop         = GAME:getGameLoop()
 
 local function getGameSpeed__ups()
     return gameAttributes:getValueOf("GAMESPEED__UPS")

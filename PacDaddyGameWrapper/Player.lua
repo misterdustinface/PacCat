@@ -1,6 +1,6 @@
 require("PacDaddyGameWrapper/PactorCollisionFunction")
 local Pactor = require("PacDaddyGameWrapper/Pactor")
-local world = GAME:getModifiableWorld()
+local world = GAME:getWorld()
 
 local public = {}
 
@@ -12,7 +12,7 @@ local function new()
     local function onPactorCollision(otherPactorAttributes)
         if otherPactorAttributes:getValueOf("TYPE") == "ENEMY" then
             world:respawnAllPactors()
-            local gameAttributes = GAME:getModifiableAttributes()
+            local gameAttributes = GAME:getAttributes()
             gameAttributes:setAttribute("LIVES", gameAttributes:getValueOf("LIVES") - 1)
         end
     end

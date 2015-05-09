@@ -1,4 +1,4 @@
-local world = GAME:getModifiableWorld()
+local world = GAME:getWorld()
 
 local frienemy = world:getPactor("FRIENEMY")
 

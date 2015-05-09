@@ -1,4 +1,4 @@
-local player = GAME:getModifiableWorld():getPactor("PLAYER1")
-local controller = GAME:getModifiablePactorController()
+local player = GAME:getPactor("PLAYER1")
+local controller = GAME:getPactorController()
 
 controller:setPactor(player)

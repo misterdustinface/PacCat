@@ -1,4 +1,4 @@
-local world = GAME:getModifiableWorld()
+local world = GAME:getWorld()
 
 local Player = require("PacDaddyGameWrapper/Player")
 local Enemy  = require("PacDaddyGameWrapper/Enemy")
