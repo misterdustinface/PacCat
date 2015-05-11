@@ -18,6 +18,7 @@ local function new()
         if otherPactorAttributes:getValueOf("TYPE") == "PLAYER" then
             local gameAttributes = GAME:getAttributes()
             gameAttributes:setAttribute("SCORE", gameAttributes:getValueOf("SCORE") + pickup:getValueOf("VALUE"))
+            pickup:setAttribute("VALUE", 0)
             local world = GAME:getWorld()
             local myName = pickup:getValueOf("NAME")
             world:removePactor(myName)
