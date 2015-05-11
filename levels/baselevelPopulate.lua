@@ -1,7 +1,7 @@
 local populationTable = {
-    { class = "Player", row = 17, col = 14, name = "PLAYER1",   traversable = { "FLOOR" } },
-    { class = "Enemy",  row = 14, col = 13, name = "FRIENEMY",  traversable = { "FLOOR", "ENEMY_SPAWN" }, speed = 0.5 },
-    { class = "Enemy",  row = 14, col = 14, name = "FRIENEMY2", traversable = { "FLOOR", "ENEMY_SPAWN" }, speed = 0.3 },
+    { class = "Player", row = 24, col = 15, name = "PLAYER1",   traversable = { "FLOOR" } },
+    { class = "Enemy",  row = 15, col = 14, name = "FRIENEMY",  traversable = { "FLOOR", "ENEMY_SPAWN" }, speed = 0.5 },
+    { class = "Enemy",  row = 15, col = 15, name = "FRIENEMY2", traversable = { "FLOOR", "ENEMY_SPAWN" }, speed = 0.3 },
 }
 
 local board = GAME:getTiledBoard()
@@ -14,7 +14,7 @@ for row = 1, board.length do
         
         if tileName == "FLOOR" then
             table.insert(populationTable, {
-                class = "Pickup", row = (row-1), col = (col-1), name = "PICKUP".."R:"..row.."C:"..col, traversable = { "FLOOR "}
+                class = "Pickup", row = row, col = col, name = "PICKUP".."R:"..row.."C:"..col, traversable = { "FLOOR" }
             })
         end
     end

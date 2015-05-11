@@ -18,7 +18,7 @@ local function populate(poptable)
         local obj   = class:new()
         world:addPactor(name, obj)
         local row, col = entity.row, entity.col
-        world:setPactorSpawn(name, row, col)
+        world:setPactorSpawn(name, row - 1, col - 1)
         world:respawnPactor(name)
         local travTilesTable = entity.traversable
         for _, tile in ipairs(travTilesTable) do
