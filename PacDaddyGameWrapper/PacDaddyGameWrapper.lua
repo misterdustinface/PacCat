@@ -71,7 +71,32 @@ end
 
 local function getModifiablePactor(this, name)
     local world = this:getWorld()
-    return world:getPactor(name)
+    local pactorExists, pactor = pcall(world.getPactor, world, name)
+    if pactorExists then return pactor end
+end
+
+local function isTraversableForPactor(this, row, col, name)
+    -- expecting 0 based indexing
+    local world = this:getWorld()
+    local ok, traversable = pcall(world.isTraversableForPactor, world, (row - 1), (col - 1), name)
+    return (ok and traversable)
+end
+
+local function getPactorNames(this)
+    local world = this:getWorld()
+    return world:getPactorNames()
+end
+
+local function attemptToGetCoordinateOfPactor(this, name)
+    local world = this:getWorld()
+    local row = world:getRowOf(name) + 1
+    local col = world:getColOf(name) + 1
+    return { row = row, col = col }
+end
+
+local function getCoordinateOfPactor(this, name)
+    local exists, coordinate = pcall(attemptToGetCoordinateOfPactor, this, name)
+    if exists then return coordinate end
 end
 
 public.addComponent = addComponentToGame
@@ -90,5 +115,8 @@ public.getInputProcessor = getModifiableInputProcessor
 public.getGameLoop = getModifiableGameLoop
 public.getPactorController = getModifiablePactorController
 public.getPactor = getModifiablePactor
+public.getPactorNames = getPactorNames
+public.isTraversableForPactor = isTraversableForPactor
+public.getCoordinateOfPactor = getCoordinateOfPactor
 
 return public

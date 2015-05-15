@@ -1,26 +1,67 @@
 local world = GAME:getWorld()
+local GravityMap = require("features/Reloadable/AI/GravityMap")
 
-local function followPlayer1(myName)
-    local player1Pos = { row = world:getRowOf("PLAYER1"),  col = world:getColOf("PLAYER1") }
-    local myPos      = { row = world:getRowOf(myName),     col = world:getColOf(myName) }
-    local me = world:getPactor(myName)
+local primaryDirection = { }
+local secondaryDirection = { }
+
+local gravityMap = GravityMap:new()
+
+local function degenerate(weight, depth)
+    return weight / (depth+1)
+end
+
+local function tickGravityMap()
+    gravityMap:setWeights({ PLAYER = 100000 })
+    gravityMap:setDegeneracyFunction( degenerate )
+    gravityMap:generate()
+    --gravityMap:print()
+end
+
+local function tickPactorAI(myName)
+    primaryDirection[myName] = gravityMap:bestMove(myName)
+    secondaryDirection[myName] = gravityMap:bestSecondaryMove(myName)
+end
+
+local function forcePactorPerform(name)
+    local pactor = world:getPactor(name)
+    if pactor then
+        if pactor:getValueOf("DIRECTION") == "NONE" then
+            pactor:performAction(primaryDirection[name])
+        else
+            pactor:performAction(primaryDirection[name])
+            pactor:performAction(secondaryDirection[name])
+        end  
+    end
+end
+
+local function forcePactorPerform(name)
+    local pactor = world:getPactor(name)
     
-    if player1Pos.row < myPos.row     and world:isTraversableForPactor(myPos.row-1, myPos.col, myName) then
-        me:performAction("UP")
-    elseif player1Pos.row > myPos.row and world:isTraversableForPactor(myPos.row+1, myPos.col, myName) then
-        me:performAction("DOWN")
-    elseif player1Pos.col < myPos.col and world:isTraversableForPactor(myPos.row, myPos.col-1, myName) then
-        me:performAction("LEFT")
-    elseif player1Pos.col > myPos.col and world:isTraversableForPactor(myPos.row, myPos.col+1, myName) then
-        me:performAction("RIGHT")
+    if not primaryDirection[name] then
+        primaryDirection[name] = "NONE"
+    end
+    if not secondaryDirection[name] then
+        secondaryDirection[name] = "NONE"
+    end
+    
+    if pactor then    
+        if pactor:getValueOf("DIRECTION") == "NONE" then
+            pactor:performAction(primaryDirection[name])
+        else
+            pactor:performAction(primaryDirection[name])
+            pactor:performAction(secondaryDirection[name])
+        end  
     end
 end
 
 local function enemyTick()
-    followPlayer1("FRIENEMY")
-    followPlayer1("FRIENEMY2")
-    followPlayer1("FRIENEMY3")
-    -- TODO
+    tickGravityMap()
+    tickPactorAI("FRIENEMY")
+    tickPactorAI("FRIENEMY2")
+    tickPactorAI("FRIENEMY3")
+    forcePactorPerform("FRIENEMY")
+    forcePactorPerform("FRIENEMY2")
+    forcePactorPerform("FRIENEMY3")
 end
 
 AI_TICK = enemyTick
