@@ -14,24 +14,12 @@ local function tickGravityMap()
     gravityMap:setWeights({ PLAYER = 9000 })
     gravityMap:setDegeneracyFunction( degenerate )
     gravityMap:generate()
-    gravityMap:print()
+    --gravityMap:print()
 end
 
 local function tickPactorAI(myName)
     primaryDirection[myName] = gravityMap:bestMove(myName)
     secondaryDirection[myName] = gravityMap:bestSecondaryMove(myName)
-end
-
-local function forcePactorPerform(name)
-    local pactor = world:getPactor(name)
-    if pactor then
-        if pactor:getValueOf("DIRECTION") == "NONE" then
-            pactor:performAction(primaryDirection[name])
-        else
-            pactor:performAction(primaryDirection[name])
-            pactor:performAction(secondaryDirection[name])
-        end  
-    end
 end
 
 local function forcePactorPerform(name)
