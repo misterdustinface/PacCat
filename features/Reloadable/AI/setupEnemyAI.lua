@@ -11,10 +11,10 @@ local function degenerate(weight, depth)
 end
 
 local function tickGravityMap()
-    gravityMap:setWeights({ PLAYER = 100000 })
+    gravityMap:setWeights({ PLAYER = 9000 })
     gravityMap:setDegeneracyFunction( degenerate )
     gravityMap:generate()
-    --gravityMap:print()
+    gravityMap:print()
 end
 
 local function tickPactorAI(myName)
@@ -49,7 +49,7 @@ local function forcePactorPerform(name)
             pactor:performAction(primaryDirection[name])
         else
             pactor:performAction(primaryDirection[name])
-            pactor:performAction(secondaryDirection[name])
+            --pactor:performAction(secondaryDirection[name])
         end  
     end
 end

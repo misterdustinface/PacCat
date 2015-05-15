@@ -246,10 +246,10 @@ function bestMove(gravMap, pactorName)
 end
 
 local coordinateModifiers = {
-    UP    = function(gravMap, coordinate) coordinate.row = wrapRow(gravMap, coordinate.row - 1) end,
-    DOWN  = function(gravMap, coordinate) coordinate.row = wrapRow(gravMap, coordinate.row + 1) end,
-    LEFT  = function(gravMap, coordinate) coordinate.col = wrapCol(gravMap, coordinate.col - 1) end,
-    RIGHT = function(gravMap, coordinate) coordinate.col = wrapCol(gravMap, coordinate.col + 1) end,
+    UP    = function(gravMap, coordinate) return {row = wrapRow(gravMap, coordinate.row - 1), col = coordinate.col} end,
+    DOWN  = function(gravMap, coordinate) return {row = wrapRow(gravMap, coordinate.row + 1), col = coordinate.col} end,
+    LEFT  = function(gravMap, coordinate) return {row = coordinate.row, col = wrapCol(gravMap, coordinate.col - 1)} end,
+    RIGHT = function(gravMap, coordinate) return {row = coordinate.row, col = wrapCol(gravMap, coordinate.col + 1)} end,
 }
 
 function bestSecondaryMove(gravMap, pactorName)
@@ -258,7 +258,7 @@ function bestSecondaryMove(gravMap, pactorName)
     local direction = bestMove(gravMap, pactorName)
     local coordinateModifier = coordinateModifiers[direction]
     if type(coordinateModifier) == 'function' then
-        coordinateModifier(gravMap, coordinate)
+        coordinate = coordinateModifier(gravMap, coordinate)
     end
     
     return bestDirectionForPactorGivenCoordinate(gravMap, pactorName, coordinate)
