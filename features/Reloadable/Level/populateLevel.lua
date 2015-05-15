@@ -2,11 +2,11 @@ local poptable = dofile("levels/baselevelPopulate.lua")
 
 local Player = require("PacDaddyGameWrapper/Player")
 local Enemy  = require("PacDaddyGameWrapper/Enemy")
-local PointsPickup = require("PacDaddyGameWrapper/PointsPickup")
+local Pellet = require("PacDaddyGameWrapper/Pellet")
 
 local classmap = {
   ["Player"] = Player,
-  ["Pickup"] = PointsPickup,
+  ["Pellet"] = Pellet,
   ["Enemy"]  = Enemy,
 }
 

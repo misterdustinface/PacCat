@@ -15,7 +15,7 @@ for row = 1, board.length do
         
         if tileName == "FLOOR" then
             table.insert(populationTable, {
-                class = "Pickup", row = row, col = col, name = "PICKUP".."R:"..row.."C:"..col, traversable = { "FLOOR" }
+                class = "Pellet", row = row, col = col, name = "PELLET".."R:"..row.."C:"..col, traversable = { "FLOOR" }
             })
         end
     end
