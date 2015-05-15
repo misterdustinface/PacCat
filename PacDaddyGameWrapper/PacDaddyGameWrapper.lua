@@ -2,6 +2,10 @@ local public = {}
 
 local game = APPLICATION
 
+local boardReader = game:getBoardReader()
+local inputProcessor = game:getInputProcessor()
+local attributeReader = game:getGameAttributeReader()
+
 local function addComponentToGame(this, name, implementation)
     game:addComponent(name, implementation)
 end
@@ -15,33 +19,33 @@ local function quitGame(this)
 end
 
 local function sendCommand(this, command)
-    this.inputProcessor:sendCommand(command)
+    inputProcessor:sendCommand(command)
 end
 
 local function getCommands(this)
-    return this.inputProcessor:getCommands()
+    return inputProcessor:getCommands()
 end
 
 local function getValueOf(this, attribute)
-    return this.attributeReader:getValueOf(attribute)
+    return attributeReader:getValueOf(attribute)
 end
 
 local function getAttributes(this)
-    return this.attributeReader:getAttributes()
+    return attributeReader:getAttributes()
 end
 
 local function getTiledBoard(this)
-    local ok, board = pcall(this.boardReader.getTiledBoard, this.boardReader)
+    local ok, board = pcall(boardReader.getTiledBoard, boardReader)
     if ok then return board end
 end
 
 local function getTileNames(this)
-    local ok, tilenames = pcall(this.boardReader.getTileNames, this.boardReader)
+    local ok, tilenames = pcall(boardReader.getTileNames, boardReader)
     if ok then return tilenames end
 end
 
 local function getInfoForAllPactorsWithAttribute(this, attribute)
-    local ok, info = pcall(this.boardReader.getInfoForAllPactorsWithAttribute, this.boardReader, attribute)
+    local ok, info = pcall(boardReader.getInfoForAllPactorsWithAttribute, boardReader, attribute)
     if ok then return info end
 end
 
@@ -70,24 +74,21 @@ local function getModifiablePactor(this, name)
     return world:getPactor(name)
 end
 
-public.boardReader                   = game:getBoardReader()
-public.inputProcessor                = game:getInputProcessor()
-public.attributeReader               = game:getGameAttributeReader()
-public.addComponent                  = addComponentToGame
-public.start                         = startGame
-public.quit                          = quitGame
-public.sendCommand                   = sendCommand
-public.getCommands                   = getCommands
-public.getValueOf                    = getValueOf
-public.getAttributes                 = getAttributes
-public.getTiledBoard                 = getTiledBoard
-public.getTileNames                  = getTileNames
+public.addComponent = addComponentToGame
+public.start = startGame
+public.quit = quitGame
+public.sendCommand = sendCommand
+public.getCommands = getCommands
+public.getValueOf = getValueOf
+public.getAttributes = getAttributes
+public.getTiledBoard = getTiledBoard
+public.getTileNames = getTileNames
 public.getInfoForAllPactorsWithAttribute = getInfoForAllPactorsWithAttribute
-public.getWorld            = getModifiableWorld
-public.getAttributes       = getModifiableAttributes
-public.getInputProcessor   = getModifiableInputProcessor
-public.getGameLoop         = getModifiableGameLoop
+public.getWorld = getModifiableWorld
+public.getAttributes = getModifiableAttributes
+public.getInputProcessor = getModifiableInputProcessor
+public.getGameLoop = getModifiableGameLoop
 public.getPactorController = getModifiablePactorController
-public.getPactor           = getModifiablePactor
+public.getPactor = getModifiablePactor
 
 return public
