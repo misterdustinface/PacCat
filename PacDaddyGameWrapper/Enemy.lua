@@ -18,11 +18,7 @@ local function new()
     }
     
     local function onPactorCollision(otherPactorAttributes)
-        if otherPactorAttributes:getValueOf("TYPE") == "ENEMY" then
-            local myCurrentDirection = enemy:getValueOf("DIRECTION")
-            local myOppositeDirection = oppositeDirectionTable[myCurrentDirection]
-            enemy:performAction(myOppositeDirection)
-        end
+        -- TODO
     end
     
     enemy:setOnCollisionFunction(PactorCollisionFunction(onPactorCollision))
