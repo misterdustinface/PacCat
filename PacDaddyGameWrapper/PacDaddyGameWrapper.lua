@@ -30,6 +30,10 @@ local function getValueOf(this, attribute)
     return attributeReader:getValueOf(attribute)
 end
 
+local function setValueOf(this, attribute, value)
+    attributeReader:setAttribute(attribute, value)
+end
+
 local function getAttributes(this)
     return attributeReader:getAttributes()
 end
@@ -47,6 +51,11 @@ end
 local function getInfoForAllPactorsWithAttribute(this, attribute)
     local ok, info = pcall(boardReader.getInfoForAllPactorsWithAttribute, boardReader, attribute)
     if ok then return info end
+end
+
+local function getNumberOfPactorsWithAttribute(this, attribute)
+    local info = this:getInfoForAllPactorsWithAttribute(attribute)
+    if info then return info.length end
 end
 
 local function getModifiableWorld(this)
@@ -105,10 +114,12 @@ public.quit = quitGame
 public.sendCommand = sendCommand
 public.getCommands = getCommands
 public.getValueOf = getValueOf
+public.setValueOf = setValueOf
 public.getAttributes = getAttributes
 public.getTiledBoard = getTiledBoard
 public.getTileNames = getTileNames
 public.getInfoForAllPactorsWithAttribute = getInfoForAllPactorsWithAttribute
+public.getNumberOfPactorsWithAttribute = getNumberOfPactorsWithAttribute
 public.getWorld = getModifiableWorld
 public.getAttributes = getModifiableAttributes
 public.getInputProcessor = getModifiableInputProcessor

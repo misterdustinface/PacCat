@@ -1,7 +1,6 @@
-local gameAttributes = GAME:getAttributes()
-
-gameAttributes:setAttribute("SCORE", 0)
-gameAttributes:setAttribute("LIVES", 3)
-gameAttributes:setAttribute("GAMESPEED__UPS", 15)
-gameAttributes:setAttribute("IS_PAUSED", true)
-gameAttributes:setAttribute("LOST_GAME", false)
+GAME:setValueOf("SCORE", 0)
+GAME:setValueOf("LIVES", 5)
+GAME:setValueOf("GAMESPEED__UPS", 11)
+GAME:setValueOf("IS_PAUSED", true)
+GAME:setValueOf("LOST_GAME", false)
+GAME:setValueOf("LEVEL", 1)
