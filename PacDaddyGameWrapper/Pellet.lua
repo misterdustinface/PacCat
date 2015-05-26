@@ -19,9 +19,8 @@ local function new()
             local gameAttributes = GAME:getAttributes()
             gameAttributes:setAttribute("SCORE", gameAttributes:getValueOf("SCORE") + pickup:getValueOf("VALUE"))
             pickup:setAttribute("VALUE", 0)
-            local world = GAME:getWorld()
             local myName = pickup:getValueOf("NAME")
-            world:removePactor(myName)
+            GAME:removePactor(myName)
         end
     end
     

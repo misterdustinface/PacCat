@@ -108,6 +108,11 @@ local function getCoordinateOfPactor(this, name)
     if exists then return coordinate end
 end
 
+local function removePactor(this, name)
+    local world = this:getWorld()
+    world:removePactor(name)
+end
+
 public.addComponent = addComponentToGame
 public.start = startGame
 public.quit = quitGame
@@ -129,5 +134,6 @@ public.getPactor = getModifiablePactor
 public.getPactorNames = getPactorNames
 public.isTraversableForPactor = isTraversableForPactor
 public.getCoordinateOfPactor = getCoordinateOfPactor
+public.removePactor = removePactor
 
 return public

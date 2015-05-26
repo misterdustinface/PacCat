@@ -1,5 +1,6 @@
 
 local function gameRules()
+
     if GAME:getValueOf("LIVES") == -1 then
         GAME:setValueOf("LOST_GAME", true)
         print("Lost Game. Score: " .. GAME:getValueOf("SCORE"))
