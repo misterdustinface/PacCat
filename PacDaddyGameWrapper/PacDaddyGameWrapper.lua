@@ -54,8 +54,8 @@ local function getInfoForAllPactorsWithAttribute(this, attribute)
 end
 
 local function getNumberOfPactorsWithAttribute(this, attribute)
-    local info = this:getInfoForAllPactorsWithAttribute(attribute)
-    if info then return info.length end
+    local ok, count = pcall(boardReader.getNumberOfPactorsWithAttribute, boardReader, attribute)
+    if ok then return count end
 end
 
 local function getModifiableWorld(this)
