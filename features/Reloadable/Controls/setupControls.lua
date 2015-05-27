@@ -32,6 +32,18 @@ local function decreaseGameSpeed()
     mainLoop:setUpdatesPerSecond(getGameSpeed__ups())
 end
 
+local function addLife()
+    GAME:setValueOf("LIVES", GAME:getValueOf("LIVES") + 1)
+end
+
+local function removeLife()
+    GAME:setValueOf("LIVES", GAME:getValueOf("LIVES") - 1)
+end
+
+local function nextLevel()
+    GAME:setValueOf("LEVEL", GAME:getValueOf("LEVEL") + 1)
+end
+
 local function reloadFeatures()
     GAME:sendCommand("PAUSE")
     loadFeatures("features/Reloadable")
@@ -52,3 +64,6 @@ inputProcessor:addCommand("GAMESPEED++", VoidFunctionPointer(increaseGameSpeed))
 inputProcessor:addCommand("GAMESPEED--", VoidFunctionPointer(decreaseGameSpeed))
 inputProcessor:addCommand("RELOAD",      VoidFunctionPointer(reloadFeatures))
 inputProcessor:addCommand("QUIT",        VoidFunctionPointer(quitGame))
+inputProcessor:addCommand("LEVEL++",     VoidFunctionPointer(nextLevel))
+inputProcessor:addCommand("LIVES++",     VoidFunctionPointer(addLife))
+inputProcessor:addCommand("LIVES--",     VoidFunctionPointer(removeLife))

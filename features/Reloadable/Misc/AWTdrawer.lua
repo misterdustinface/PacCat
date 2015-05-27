@@ -21,7 +21,22 @@ local colormap = {
     ["PICKUP"]        = Color.WHITE,
 }
 
+local wallcolors = {
+    [0] = Color.BLACK,
+    Color.BLUE,
+    Color.GREEN,
+    Color.YELLOW,
+    Color.ORANGE,
+    Color.RED,
+    Color.MAGENTA,
+    Color.GRAY,
+}
+
 local function getColor(tilename)
+    if tilename == "WALL" then
+        return wallcolors[(GAME:getValueOf("LEVEL") % (#wallcolors + 1))]
+    end
+
     local color = colormap[tilename]
     if color == nil then
         color = Color.GRAY

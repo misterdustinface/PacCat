@@ -10,6 +10,10 @@ local pressProcessDispatch = {
     [KEYS.R]     = function() GAME:sendCommand("RELOAD") end,
     [KEYS.Q]     = function() GAME:sendCommand("QUIT")   end,
     [KEYS.ESC]   = function() GAME:sendCommand("QUIT")   end,
+    
+    [KEYS.F1]    = function() GAME:sendCommand("LEVEL++") end,
+    [KEYS.F2]    = function() GAME:sendCommand("LIVES++") end,
+    [KEYS.F3]    = function() GAME:sendCommand("LIVES--") end,
 }
 
 PRESS_PROCESS_DISPATCH = pressProcessDispatch
