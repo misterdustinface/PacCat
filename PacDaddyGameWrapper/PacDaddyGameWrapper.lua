@@ -74,10 +74,6 @@ local function getModifiableGameLoop(this)
     return game:getWritable("MAINLOOP")
 end
 
-local function getModifiablePactorController(this)
-    return game:getWritable("PACTOR_CONTROLLER")
-end
-
 local function getModifiablePactor(this, name)
     local world = this:getWorld()
     local pactorExists, pactor = pcall(world.getPactor, world, name)
@@ -129,7 +125,6 @@ public.getWorld = getModifiableWorld
 public.getAttributes = getModifiableAttributes
 public.getInputProcessor = getModifiableInputProcessor
 public.getGameLoop = getModifiableGameLoop
-public.getPactorController = getModifiablePactorController
 public.getPactor = getModifiablePactor
 public.getPactorNames = getPactorNames
 public.isTraversableForPactor = isTraversableForPactor

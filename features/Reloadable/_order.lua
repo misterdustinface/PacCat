@@ -2,7 +2,7 @@ return {
   "Attributes",
   "Level",
   "AI",
-  "Controls",
   "Controllers",
+  "Controls",
   "Misc",
 }

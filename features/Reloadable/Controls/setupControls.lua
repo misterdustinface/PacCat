@@ -1,7 +1,6 @@
 require("luasrc/VoidFunctionPointer")
 
 local inputProcessor   = GAME:getInputProcessor()
-local pactorController = GAME:getPactorController()
 local gameAttributes   = GAME:getAttributes()
 local mainLoop         = GAME:getGameLoop()
 
@@ -11,22 +10,6 @@ end
 
 local function shiftGameSpeed__ups(shiftamount__ups)
     gameAttributes:setAttribute("GAMESPEED__UPS", getGameSpeed__ups() + shiftamount__ups)
-end
-
-local function movePactorUp()
-    pactorController:sendCommandToPactor("UP")
-end
-
-local function movePactorDown()
-    pactorController:sendCommandToPactor("DOWN")
-end
-
-local function movePactorLeft()
-    pactorController:sendCommandToPactor("LEFT")
-end
-
-local function movePactorRight()
-    pactorController:sendCommandToPactor("RIGHT")
 end
 
 local function pause()
@@ -59,10 +42,10 @@ local function quitGame()
     GAME:quit()
 end
 
-inputProcessor:addCommand("UP",          VoidFunctionPointer(movePactorUp)) 
-inputProcessor:addCommand("DOWN",        VoidFunctionPointer(movePactorDown))
-inputProcessor:addCommand("LEFT",        VoidFunctionPointer(movePactorLeft)) 
-inputProcessor:addCommand("RIGHT",       VoidFunctionPointer(movePactorRight)) 
+inputProcessor:addCommand("UP",          CONTROLLER1:wrapCommand("UP")) 
+inputProcessor:addCommand("DOWN",        CONTROLLER1:wrapCommand("DOWN"))
+inputProcessor:addCommand("LEFT",        CONTROLLER1:wrapCommand("LEFT")) 
+inputProcessor:addCommand("RIGHT",       CONTROLLER1:wrapCommand("RIGHT")) 
 inputProcessor:addCommand("PAUSE",       VoidFunctionPointer(pause))
 inputProcessor:addCommand("PLAY",        VoidFunctionPointer(play))
 inputProcessor:addCommand("GAMESPEED++", VoidFunctionPointer(increaseGameSpeed)) 
