@@ -145,15 +145,10 @@ local function drawInfo(g)
     g:setColor(Color.WHITE)
     g:drawString(upsStr, 20, 20)
     g:drawString(fpsStr, 80, 20)
-    g:drawString("LIVES " .. GAME:getValueOf("LIVES"), 140, 20)
-    g:drawString("SCORE " .. GAME:getValueOf("SCORE"), 200, 20)
+    g:drawString("LEVEL " .. GAME:getValueOf("LEVEL"), 140, 20)
+    g:drawString("LIVES " .. GAME:getValueOf("LIVES"), 200, 20)
+    g:drawString("SCORE " .. GAME:getValueOf("SCORE"), 260, 20)
     g:setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF)
-end
-
-local function clearScreen()
-    local g = DISPLAY:getGraphics()
-    g:setColor(Color.BLACK)
-    g:fillRect(0, 0, DISPLAY:getWidth(), DISPLAY:getHeight())
 end
 
 local function swapImageBuffers()
@@ -169,17 +164,39 @@ local function getRenderingImage()
     return ImageB
 end
 
-local function drawGame()
-    clearScreen()
-    local g = DISPLAY:getGraphics()
+local function drawGameplay(g)
     g:drawImage(getRenderingImage(), borderWidth, borderHeight, nil)
     drawInfo(g)
     swapImageBuffers()
-    
+
     local g = getDrawingImage():getGraphics()
     local board = GAME:getTiledBoard()
     if board then drawBoard(g, board) end
     drawPactors(g)
+end
+
+local function drawLoseScreen(g)
+    g:setColor(Color.WHITE)
+    g:drawString("LEVEL " .. GAME:getValueOf("LEVEL"), 40, 60)
+    g:drawString("SCORE " .. GAME:getValueOf("SCORE"), 40, 80)
+    g:drawString("[PRESS ENTER TO RESTART]",           40, 100)
+end
+
+local function clearScreen()
+    local g = DISPLAY:getGraphics()
+    g:setColor(Color.BLACK)
+    g:fillRect(0, 0, DISPLAY:getWidth(), DISPLAY:getHeight())
+end
+
+local function drawGame()
+    clearScreen()
+    local g = DISPLAY:getGraphics()
+    
+    if GAME:getValueOf("LOST_GAME") then
+        drawLoseScreen(g)
+    else
+        drawGameplay(g)
+    end
 end
 
 DRAWGAME = drawGame

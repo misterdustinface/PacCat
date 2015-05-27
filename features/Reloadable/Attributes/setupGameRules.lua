@@ -3,19 +3,11 @@ local function gameRules()
 
     if GAME:getValueOf("LIVES") <= -1 then
         GAME:setValueOf("LOST_GAME", true)
-        print("Lost Game.", "Level:", GAME:getValueOf("LEVEL"), "Score:", GAME:getValueOf("SCORE"))
-        GAME:sendCommand("RELOAD")
+        GAME:sendCommand("PAUSE")
     end
     
     if GAME:getNumberOfPactorsWithAttribute("IS_PICKUP") <= 0 then
-        local score = GAME:getValueOf("SCORE")
-        local lives = GAME:getValueOf("LIVES")
-        local level = GAME:getValueOf("LEVEL") + 1
-        print("Level: " .. level)
-        GAME:sendCommand("RELOAD")
-        GAME:setValueOf("SCORE", score)
-        GAME:setValueOf("LIVES", lives)
-        GAME:setValueOf("LEVEL", level)
+        GAME:sendCommand("LEVEL++")
     end
     
 end

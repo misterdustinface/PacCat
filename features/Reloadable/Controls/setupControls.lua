@@ -41,7 +41,19 @@ local function removeLife()
 end
 
 local function nextLevel()
-    GAME:setValueOf("LEVEL", GAME:getValueOf("LEVEL") + 1)
+    local score = GAME:getValueOf("SCORE")
+    local lives = GAME:getValueOf("LIVES")
+    local level = GAME:getValueOf("LEVEL") + 1
+    GAME:sendCommand("RELOAD")
+    GAME:setValueOf("SCORE", score)
+    GAME:setValueOf("LIVES", lives)
+    GAME:setValueOf("LEVEL", level)
+end
+
+local function restartGame()
+    if GAME:getValueOf("LOST_GAME") then
+        GAME:sendCommand("RELOAD")
+    end
 end
 
 local function reloadFeatures()
@@ -67,3 +79,4 @@ inputProcessor:addCommand("QUIT",        VoidFunctionPointer(quitGame))
 inputProcessor:addCommand("LEVEL++",     VoidFunctionPointer(nextLevel))
 inputProcessor:addCommand("LIVES++",     VoidFunctionPointer(addLife))
 inputProcessor:addCommand("LIVES--",     VoidFunctionPointer(removeLife))
+inputProcessor:addCommand("RESTART",     VoidFunctionPointer(restartGame))
