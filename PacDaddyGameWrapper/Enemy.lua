@@ -22,8 +22,9 @@ local function new()
     
         if otherPactorAttributes:getValueOf("IS_PLAYER") then
         
-            if enemy:getValueOf("IS_PICKUP") then
+            if GAME:getValueOf("PLAYER_ENERGIZED") then
                 CONSUME_PACTOR(enemy)
+                REVIVE_PACTOR(enemy)
             else
                 GAME:sendCommand("PAUSE")
                 GAME:sendCommand("LIVES--")

@@ -12,15 +12,6 @@ local TILEHEIGHT
 local borderHeight = 40
 local borderWidth  = 40
 
-local colormap = {
-    ["PLAYER"]        = Color.YELLOW,
-    ["ENEMY"]         = Color.RED,
-    ["WALL"]          = Color.BLUE,
-    ["FLOOR"]         = Color.BLACK,
-    ["ENEMY_SPAWN"]   = Color.GRAY,
-    ["PELLET"]        = Color.WHITE,
-}
-
 local wallcolors = {
     [0] = Color.BLACK,
     Color.BLUE,
@@ -32,12 +23,24 @@ local wallcolors = {
     Color.GRAY,
 }
 
-local function getColor(tilename)
-    if tilename == "WALL" then
-        return wallcolors[(GAME:getValueOf("LEVEL") % (#wallcolors + 1))]
-    end
+local colormap = {
+    ["PLAYER"]        = function() return Color.YELLOW end,
+    ["ENEMY"]         = function() 
+                            if GAME:getValueOf("PLAYER_ENERGIZED") then
+                                return Color.BLUE
+                            else
+                                return Color.RED
+                            end
+                        end,
+    ["WALL"]          = function() return wallcolors[(GAME:getValueOf("LEVEL") % (#wallcolors + 1))] end,
+    ["FLOOR"]         = function() return Color.BLACK end,
+    ["ENEMY_SPAWN"]   = function() return Color.GRAY end,
+    ["PELLET"]        = function() return Color.WHITE end,
+    ["ENERGIZER"]     = function() return Color.WHITE end,
+}
 
-    local color = colormap[tilename]
+local function getColor(tilename)
+    local color = colormap[tilename]()
     if color == nil then
         color = Color.GRAY
     end
@@ -75,6 +78,11 @@ local drawermap = {
         local pickupWidth, pickupHeight = TILEWIDTH/4, TILEHEIGHT/4
         g:fillOval((col) * TILEWIDTH + TILEWIDTH/2 - pickupWidth/2, (row) * TILEHEIGHT + TILEHEIGHT/2 - pickupHeight/2, pickupWidth, pickupHeight)
     end,
+    ["ENERGIZER"] = function(g, info)
+        local row, col = info:getValueOf("ROW"), info:getValueOf("COL")
+        local pickupWidth, pickupHeight = TILEWIDTH/(1.75), TILEHEIGHT/(1.75)
+        g:fillOval((col) * TILEWIDTH + TILEWIDTH/2 - pickupWidth/2, (row) * TILEHEIGHT + TILEHEIGHT/2 - pickupHeight/2, pickupWidth, pickupHeight)
+    end
 }
 
 local function getPactorDrawer(type)
@@ -112,15 +120,21 @@ local function drawBoard(g, board)
 end
 
 local function drawPactors(g)
-    local pickups = GAME:getInfoForAllPactorsWithAttribute("IS_PICKUP")
-    local enemies = GAME:getInfoForAllPactorsWithAttribute("IS_ENEMY")
-    local players = GAME:getInfoForAllPactorsWithAttribute("IS_PLAYER")
+    local pickups    = GAME:getInfoForAllPactorsWithAttribute("IS_PICKUP")
+    local energizers = GAME:getInfoForAllPactorsWithAttribute("IS_ENERGIZER")
+    local enemies    = GAME:getInfoForAllPactorsWithAttribute("IS_ENEMY")
+    local players    = GAME:getInfoForAllPactorsWithAttribute("IS_PLAYER")
     
     g:setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
     
     if pickups then
       for x = 1, pickups.length do
           drawPactor(g, "PELLET", pickups[x])
+      end
+    end
+    if energizers then
+      for x = 1, energizers.length do
+          drawPactor(g, "ENERGIZER", energizers[x])
       end
     end
     if enemies then

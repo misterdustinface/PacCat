@@ -12,7 +12,7 @@ local function new()
     
     local function onPactorCollision(otherPactorAttributes)
         if otherPactorAttributes:getValueOf("IS_PLAYER") then
-            CONSUME_PACTOR(pickup)
+            DESTROY_AND_CONSUME_PACTOR(pickup)
         end
     end
     

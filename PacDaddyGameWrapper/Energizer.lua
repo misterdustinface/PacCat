@@ -1,25 +1,30 @@
 require("PacDaddyGameWrapper/PactorCollisionFunction")
 require("PacDaddyGameWrapper/PactorCommon")
-local Pactor = require("PacDaddyGameWrapper/Pactor")
+local Pellet = require("PacDaddyGameWrapper/Pellet")
 
 local public = {}
 
+local function ENERGIZE(collector)
+    collector:setAttribute("IS_ENERGIZED", true)
+end
+
 local function new()
-    local pickup = Pactor:new()
-    pickup:setAttribute("IS_PICKUP",    true)
-    pickup:setAttribute("IS_ENERGIZER", true)
-    pickup:setAttribute("TYPE", "ENERGIZER")
-    pickup:setAttribute("VALUE", 50)
+    local pellet = Pellet:new()
+    pellet:setAttribute("IS_ENERGIZER", true)
+    pellet:setAttribute("TYPE", "ENERGIZER")
+    pellet:setAttribute("VALUE", 50)
 
     local function onPactorCollision(otherPactorAttributes)
         if otherPactorAttributes:getValueOf("IS_PLAYER") then
-            CONSUME_PACTOR(pickup)
-            otherPactorAttributes:setAttribute("IS_ENERGIZED", true)
+            local player = otherPactorAttributes
+            DESTROY_AND_CONSUME_PACTOR(pellet)
+            ENERGIZE(player)
+            GAME:setValueOf("PLAYER_ENERGIZED", true)
         end
     end
     
-    pickup:setOnCollisionFunction(PactorCollisionFunction(onPactorCollision))
-    return pickup
+    pellet:setOnCollisionFunction(PactorCollisionFunction(onPactorCollision))
+    return pellet
 end
 
 public.new = new
