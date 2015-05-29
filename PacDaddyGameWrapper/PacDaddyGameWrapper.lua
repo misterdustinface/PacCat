@@ -109,6 +109,11 @@ local function removePactor(this, name)
     world:removePactor(name)
 end
 
+local function respawnAllPactors(this)
+    local world = this:getWorld()
+    world:respawnAllPactors()
+end
+
 public.addComponent = addComponentToGame
 public.start = startGame
 public.quit = quitGame
@@ -130,5 +135,6 @@ public.getPactorNames = getPactorNames
 public.isTraversableForPactor = isTraversableForPactor
 public.getCoordinateOfPactor = getCoordinateOfPactor
 public.removePactor = removePactor
+public.respawnAllPactors = respawnAllPactors
 
 return public

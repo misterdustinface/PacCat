@@ -10,11 +10,7 @@ local function new()
     player:setAttribute("TYPE", "PLAYER")
     
     local function onPactorCollision(otherPactorAttributes)
-        if otherPactorAttributes:getValueOf("TYPE") == "ENEMY" then
-            world:respawnAllPactors()
-            local gameAttributes = GAME:getAttributes()
-            gameAttributes:setAttribute("LIVES", gameAttributes:getValueOf("LIVES") - 1)
-        end
+
     end
     
     player:setOnCollisionFunction(PactorCollisionFunction(onPactorCollision))

@@ -18,7 +18,7 @@ local colormap = {
     ["WALL"]          = Color.BLUE,
     ["FLOOR"]         = Color.BLACK,
     ["ENEMY_SPAWN"]   = Color.GRAY,
-    ["PICKUP"]        = Color.WHITE,
+    ["PELLET"]        = Color.WHITE,
 }
 
 local wallcolors = {
@@ -70,7 +70,7 @@ local drawermap = {
         local row, col = info:getValueOf("ROW"), info:getValueOf("COL")
         g:fillOval((col) * TILEWIDTH, (row) * TILEHEIGHT, TILEWIDTH, TILEHEIGHT) 
     end,
-    ["PICKUP"]  = function(g, info) 
+    ["PELLET"]  = function(g, info) 
         local row, col = info:getValueOf("ROW"), info:getValueOf("COL")
         local pickupWidth, pickupHeight = TILEWIDTH/4, TILEHEIGHT/4
         g:fillOval((col) * TILEWIDTH + TILEWIDTH/2 - pickupWidth/2, (row) * TILEHEIGHT + TILEHEIGHT/2 - pickupHeight/2, pickupWidth, pickupHeight)
@@ -120,7 +120,7 @@ local function drawPactors(g)
     
     if pickups then
       for x = 1, pickups.length do
-          drawPactor(g, "PICKUP", pickups[x])
+          drawPactor(g, "PELLET", pickups[x])
       end
     end
     if enemies then

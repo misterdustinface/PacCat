@@ -1,4 +1,5 @@
 require("PacDaddyGameWrapper/PactorCollisionFunction")
+require("PacDaddyGameWrapper/PactorCommon")
 local Pactor = require("PacDaddyGameWrapper/Pactor")
 
 local public = {}
@@ -18,7 +19,20 @@ local function new()
     }
     
     local function onPactorCollision(otherPactorAttributes)
-        -- TODO
+    
+        if otherPactorAttributes:getValueOf("IS_PLAYER") then
+        
+            if enemy:getValueOf("IS_PICKUP") then
+                CONSUME_PACTOR(enemy)
+            else
+                GAME:sendCommand("PAUSE")
+                GAME:sendCommand("LIVES--")
+                GAME:respawnAllPactors()
+                GAME:sendCommand("PLAY")
+            end
+        
+        end
+
     end
     
     enemy:setOnCollisionFunction(PactorCollisionFunction(onPactorCollision))
