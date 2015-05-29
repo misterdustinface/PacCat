@@ -10,6 +10,11 @@ local function gameRules()
         GAME:sendCommand("LEVEL++")
     end
     
+    if (GAME:getValueOf("SCORE") % 10000) == 0 and GAME:getValueOf("SCORE") ~= lastExtraLifeScorethen then
+        lastExtraLifeScore = GAME:getValueOf("SCORE")
+        GAME:sendCommand("LIVES++")
+    end
+    
 end
 
 GAME_RULES_TICK = gameRules

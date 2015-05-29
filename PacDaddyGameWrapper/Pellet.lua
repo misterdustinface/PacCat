@@ -8,7 +8,7 @@ local function new()
     local pickup = Pactor:new()
     pickup:setAttribute("IS_PICKUP", true)
     pickup:setAttribute("TYPE", "PELLET")
-    pickup:setAttribute("VALUE", 1)
+    pickup:setAttribute("VALUE", 10)
     
     local function onPactorCollision(otherPactorAttributes)
         if otherPactorAttributes:getValueOf("IS_PLAYER") then
