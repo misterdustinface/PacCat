@@ -23,6 +23,25 @@ local wallcolors = {
     Color.GRAY,
 }
 
+local wallcomplimentcolors = {
+    [0] = Color.GRAY,
+    Color.BLACK,
+    Color.BLACK,
+    Color.BLACK,
+    Color.BLACK,
+    Color.BLACK,
+    Color.BLACK,
+    Color.BLACK,
+}
+
+local function getWallColor()
+    return wallcolors[(GAME:getValueOf("LEVEL") % (#wallcolors + 1))]
+end
+
+local function getWallColorCompliment()
+    return wallcomplimentcolors[(GAME:getValueOf("LEVEL") % (#wallcomplimentcolors + 1))]
+end
+
 local colormap = {
     ["PLAYER"]        = function() return Color.YELLOW end,
     ["ENEMY"]         = function() 
@@ -32,9 +51,9 @@ local colormap = {
                                 return Color.RED
                             end
                         end,
-    ["WALL"]          = function() return wallcolors[(GAME:getValueOf("LEVEL") % (#wallcolors + 1))] end,
-    ["FLOOR"]         = function() return Color.BLACK end,
-    ["ENEMY_SPAWN"]   = function() return Color.GRAY end,
+    ["WALL"]          = getWallColor, -- return Color.BLUE end,
+    ["FLOOR"]         = getWallColorCompliment, --return Color.BLACK end,
+    ["ENEMY_SPAWN"]   = getWallColorCompliment, --return Color.GRAY end,
     ["PELLET"]        = function() return Color.WHITE end,
     ["ENERGIZER"]     = function() return Color.WHITE end,
 }
