@@ -15,6 +15,11 @@ local function gameRules()
         GAME:sendCommand("LIVES++")
     end
     
+    if GAME:getValueOf("ENERGIZED_TIMER"):isDebounceComplete() then
+        GAME:setValueOf("PLAYER_ENERGIZED", false)
+        CALM_ALL_ENEMIES()
+    end
+    
 end
 
 GAME_RULES_TICK = gameRules

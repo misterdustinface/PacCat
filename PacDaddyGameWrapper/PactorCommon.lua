@@ -13,3 +13,33 @@ end
 function REVIVE_PACTOR(pactor)
     GAME:respawnPactor(pactor:getValueOf("NAME"))
 end
+
+function PLAYER_ENERGIZE()
+    GAME:getValueOf("ENERGIZED_TIMER"):reset()
+    GAME:setValueOf("PLAYER_ENERGIZED", true)
+    FRIGHTEN_ALL_ENEMIES()
+end
+
+function FRIGHTEN(pactor)
+    pactor:setAttribute("IS_FRIGHTENED", true)
+end
+
+function FRIGHTEN_ALL_ENEMIES()
+    local enemiesInfo = GAME:getInfoForAllPactorsWithAttribute("IS_ENEMY")
+    for i = 1, enemiesInfo.length do
+        local pactor = GAME:getPactor(enemiesInfo[i]:getValueOf("NAME"))
+        FRIGHTEN(pactor)
+    end
+end
+
+function CALM(pactor)
+    pactor:setAttribute("IS_FRIGHTENED", false)
+end
+
+function CALM_ALL_ENEMIES()
+    local enemiesInfo = GAME:getInfoForAllPactorsWithAttribute("IS_ENEMY")
+    for i = 1, enemiesInfo.length do
+        local pactor = GAME:getPactor(enemiesInfo[i]:getValueOf("NAME"))
+        CALM(pactor)
+    end
+end

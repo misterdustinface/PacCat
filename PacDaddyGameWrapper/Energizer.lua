@@ -4,10 +4,6 @@ local Pellet = require("PacDaddyGameWrapper/Pellet")
 
 local public = {}
 
-local function ENERGIZE(collector)
-    collector:setAttribute("IS_ENERGIZED", true)
-end
-
 local function new()
     local pellet = Pellet:new()
     pellet:setAttribute("IS_ENERGIZER", true)
@@ -18,8 +14,7 @@ local function new()
         if otherPactorAttributes:getValueOf("IS_PLAYER") then
             local player = otherPactorAttributes
             DESTROY_AND_CONSUME_PACTOR(pellet)
-            ENERGIZE(player)
-            GAME:setValueOf("PLAYER_ENERGIZED", true)
+            PLAYER_ENERGIZE(player)
         end
     end
     
