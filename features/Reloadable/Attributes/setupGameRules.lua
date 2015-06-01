@@ -16,7 +16,6 @@ local function gameRules()
     end
     
     if GAME:getValueOf("ENERGIZED_TIMER"):isDebounceComplete() then
-        GAME:setValueOf("PLAYER_ENERGIZED", false)
         CALM_ALL_ENEMIES()
     end
     

@@ -5,19 +5,19 @@ local Pactor = require("PacDaddyGameWrapper/Pactor")
 local public = {}
 
 local function new()
-    local pickup = Pactor:new()
-    pickup:setAttribute("IS_PICKUP", true)
-    pickup:setAttribute("TYPE", "PELLET")
-    pickup:setAttribute("VALUE", 10)
+    local self = Pactor:new()
+    self:setAttribute("IS_PICKUP", true)
+    self:setAttribute("TYPE", "PELLET")
+    self:setAttribute("VALUE", 10)
     
     local function onPactorCollision(otherPactorAttributes)
         if otherPactorAttributes:getValueOf("IS_PLAYER") then
-            DESTROY_AND_CONSUME_PACTOR(pickup)
+            DESTROY_AND_CONSUME_PACTOR(self)
         end
     end
     
-    pickup:setOnCollisionFunction(PactorCollisionFunction(onPactorCollision))
-    return pickup
+    self:setOnCollisionFunction(PactorCollisionFunction(onPactorCollision))
+    return self
 end
 
 public.new = new

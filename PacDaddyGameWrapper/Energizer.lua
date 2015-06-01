@@ -5,21 +5,20 @@ local Pellet = require("PacDaddyGameWrapper/Pellet")
 local public = {}
 
 local function new()
-    local pellet = Pellet:new()
-    pellet:setAttribute("IS_ENERGIZER", true)
-    pellet:setAttribute("TYPE", "ENERGIZER")
-    pellet:setAttribute("VALUE", 50)
+    local self = Pellet:new()
+    self:setAttribute("IS_ENERGIZER", true)
+    self:setAttribute("TYPE", "ENERGIZER")
+    self:setAttribute("VALUE", 50)
 
     local function onPactorCollision(otherPactorAttributes)
         if otherPactorAttributes:getValueOf("IS_PLAYER") then
-            local player = otherPactorAttributes
-            DESTROY_AND_CONSUME_PACTOR(pellet)
-            PLAYER_ENERGIZE(player)
+            DESTROY_AND_CONSUME_PACTOR(self)
+            ENERGIZE_PLAYER()
         end
     end
     
-    pellet:setOnCollisionFunction(PactorCollisionFunction(onPactorCollision))
-    return pellet
+    self:setOnCollisionFunction(PactorCollisionFunction(onPactorCollision))
+    return self
 end
 
 public.new = new

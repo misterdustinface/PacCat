@@ -5,16 +5,16 @@ local world = GAME:getWorld()
 local public = {}
 
 local function new()
-    local player = Pactor:new()
-    player:setAttribute("IS_PLAYER", true)
-    player:setAttribute("TYPE", "PLAYER")
+    local self = Pactor:new()
+    self:setAttribute("IS_PLAYER", true)
+    self:setAttribute("TYPE", "PLAYER")
     
     local function onPactorCollision(otherPactorAttributes)
 
     end
     
-    player:setOnCollisionFunction(PactorCollisionFunction(onPactorCollision))
-    return player
+    self:setOnCollisionFunction(PactorCollisionFunction(onPactorCollision))
+    return self
 end
 
 public.new = new

@@ -17,10 +17,10 @@ local function INCREASE_ENEMY_VALUE()
 end
 
 local function new()
-    local enemy = Pactor:new()
-    enemy:setAttribute("IS_ENEMY", true)
-    enemy:setAttribute("TYPE", "ENEMY")
-    enemy:setAttribute("VALUE", ENEMY_VALUE)
+    local self = Pactor:new()
+    self:setAttribute("IS_ENEMY", true)
+    self:setAttribute("TYPE", "ENEMY")
+    self:setAttribute("VALUE", ENEMY_VALUE)
     
     local oppositeDirectionTable = {
       ["UP"] = "DOWN",
@@ -34,11 +34,11 @@ local function new()
     
         if otherPactorAttributes:getValueOf("IS_PLAYER") then
         
-            if enemy:getValueOf("IS_FRIGHTENED") then
-                enemy:setAttribute("VALUE", ENEMY_VALUE)
-                CONSUME_PACTOR(enemy)
-                CALM(enemy)
-                REVIVE_PACTOR(enemy)
+            if self:getValueOf("IS_FRIGHTENED") then
+                self:setAttribute("VALUE", ENEMY_VALUE)
+                CONSUME_PACTOR(self)
+                CALM(self)
+                REVIVE_PACTOR(self)
                 INCREASE_ENEMY_VALUE()
             else
                 GAME:sendCommand("PAUSE")
@@ -51,11 +51,11 @@ local function new()
 
     end
     
-    enemy:setOnCollisionFunction(PactorCollisionFunction(onPactorCollision))
+    self:setOnCollisionFunction(PactorCollisionFunction(onPactorCollision))
     
-    table.insert(enemies, enemy)
+    table.insert(enemies, self)
     
-    return enemy
+    return self
 end
 
 public.new = new

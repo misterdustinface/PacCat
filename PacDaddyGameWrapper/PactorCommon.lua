@@ -14,9 +14,8 @@ function REVIVE_PACTOR(pactor)
     GAME:respawnPactor(pactor:getValueOf("NAME"))
 end
 
-function PLAYER_ENERGIZE()
+function ENERGIZE_PLAYER()
     GAME:getValueOf("ENERGIZED_TIMER"):reset()
-    GAME:setValueOf("PLAYER_ENERGIZED", true)
     FRIGHTEN_ALL_ENEMIES()
 end
 
