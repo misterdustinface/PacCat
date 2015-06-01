@@ -42,14 +42,23 @@ local function getWallColorCompliment()
     return wallcomplimentcolors[(GAME:getValueOf("LEVEL") % (#wallcomplimentcolors + 1))]
 end
 
+local ghostColors = {
+    ["PINKY"]  = Color.PINK,
+    ["BLINKY"] = Color.RED,
+    ["INKY"]   = Color.CYAN,
+    ["CLYDE"]  = Color.ORANGE,
+}
+
 local pactorColorMap = {
     ["PLAYER"]        = function(pactor) return Color.YELLOW end,
-    ["ENEMY"]         = function(pactor) 
+    ["ENEMY"]         = function(pactor)
+                            local color
                             if pactor:getValueOf("IS_FRIGHTENED") then
-                                return Color.BLUE
+                                color = Color.BLUE
                             else
-                                return Color.RED
+                                color = ghostColors[pactor:getValueOf("NAME")] or Color.GREEN
                             end
+                            return color
                         end,
     ["PELLET"]        = function(pactor) return Color.WHITE end,
     ["ENERGIZER"]     = function(pactor) return Color.WHITE end,

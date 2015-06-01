@@ -1,8 +1,10 @@
 local populationTable = {
     { class = "Player", row = 24, col = 15, name = "PLAYER1",   traversable = { "FLOOR" } },
-    { class = "Enemy",  row = 15, col = 14, name = "FRIENEMY",  traversable = { "FLOOR", "ENEMY_SPAWN" }, speed = 0.75 },
-    { class = "Enemy",  row = 15, col = 15, name = "FRIENEMY2", traversable = { "FLOOR", "ENEMY_SPAWN" }, speed = 0.5 },
-    { class = "Enemy",  row = 15, col = 16, name = "FRIENEMY3", traversable = { "FLOOR", "ENEMY_SPAWN" }, speed = 0.25 },
+    { class = "Enemy",  row = 14, col = 15, name = "BLINKY", traversable = { "FLOOR", "ENEMY_SPAWN" }, speed = 0.75 },
+    { class = "Enemy",  row = 15, col = 14, name = "INKY",   traversable = { "FLOOR", "ENEMY_SPAWN" }, speed = 0.5 },
+    { class = "Enemy",  row = 15, col = 15, name = "PINKY",  traversable = { "FLOOR", "ENEMY_SPAWN" }, speed = 0.5 },
+    { class = "Enemy",  row = 15, col = 16, name = "CLYDE",  traversable = { "FLOOR", "ENEMY_SPAWN" }, speed = 0.25 },
+    { class = "Enemy",  row = 14, col = 14, name = "GUNKY",  traversable = { "FLOOR", "ENEMY_SPAWN" }, speed = 0.25 },
     { class = "Energizer", row = 24, col = 17, name = "ENERGIZER1", traversable = { "FLOOR" } },
 }
 

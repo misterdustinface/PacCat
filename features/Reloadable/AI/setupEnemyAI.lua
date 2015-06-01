@@ -44,12 +44,15 @@ end
 
 local function enemyTick()
     tickGravityMap()
-    tickPactorAI("FRIENEMY")
-    tickPactorAI("FRIENEMY2")
-    tickPactorAI("FRIENEMY3")
-    forcePactorPerform("FRIENEMY")
-    forcePactorPerform("FRIENEMY2")
-    forcePactorPerform("FRIENEMY3")
+    local enemiesInfo = GAME:getInfoForAllPactorsWithAttribute("IS_ENEMY")
+    for i = 1, enemiesInfo.length do
+        local pactor = GAME:getPactor(enemiesInfo[i]:getValueOf("NAME"))
+        tickPactorAI(pactor:getValueOf("NAME"))
+    end
+    for i = 1, enemiesInfo.length do
+        local pactor = GAME:getPactor(enemiesInfo[i]:getValueOf("NAME"))
+        forcePactorPerform(pactor:getValueOf("NAME"))
+    end
 end
 
 AI_TICK = enemyTick
