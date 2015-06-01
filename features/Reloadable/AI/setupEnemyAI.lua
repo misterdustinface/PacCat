@@ -4,20 +4,33 @@ local GravityMap = require("features/Reloadable/AI/GravityMap")
 local primaryDirection = { }
 local secondaryDirection = { }
 
-local gravityMap = GravityMap:new()
+local frightenedMap = GravityMap:new()
+local calmMap = GravityMap:new()
 
 local function degenerate(weight, depth)
     return weight / (depth+1)
 end
 
 local function tickGravityMap()
-    gravityMap:setWeights({ PLAYER = 9000 })
-    gravityMap:setDegeneracyFunction( degenerate )
-    gravityMap:generate()
-    --gravityMap:print()
+    frightenedMap:setWeights({ PLAYER = -9000 })
+    frightenedMap:setDegeneracyFunction( degenerate )
+    frightenedMap:generate()
+
+    calmMap:setWeights({ PLAYER = 9000 })
+    calmMap:setDegeneracyFunction( degenerate )
+    calmMap:generate()
 end
 
 local function tickPactorAI(myName)
+    local gravityMap
+    local pactor = world:getPactor(myName)
+    
+    if pactor:getValueOf("IS_FRIGHTENED") then
+        gravityMap = frightenedMap
+    else
+        gravityMap = calmMap
+    end
+
     primaryDirection[myName] = gravityMap:bestMove(myName)
     secondaryDirection[myName] = gravityMap:bestSecondaryMove(myName)
 end
