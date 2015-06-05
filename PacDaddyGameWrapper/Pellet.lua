@@ -9,6 +9,7 @@ local function new()
     self:setAttribute("IS_PICKUP", true)
     self:setAttribute("TYPE", "PELLET")
     self:setAttribute("VALUE", 10)
+    self:setAttribute("SPEED__PCT", 0.0)
     
     local function onPactorCollision(otherPactorAttributes)
         if otherPactorAttributes:getValueOf("IS_PLAYER") then

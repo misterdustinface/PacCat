@@ -9,6 +9,7 @@ local function new()
     self:setAttribute("IS_ENERGIZER", true)
     self:setAttribute("TYPE", "ENERGIZER")
     self:setAttribute("VALUE", 50)
+    self:setAttribute("SPEED__PCT", 0.0)
 
     local function onPactorCollision(otherPactorAttributes)
         if otherPactorAttributes:getValueOf("IS_PLAYER") then
